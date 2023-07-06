@@ -62,14 +62,17 @@ struct SplashView: View {
             .animation(.easeInOut(duration: 1.5).repeatForever(), value: isAnimation)
             .foregroundColor(.cyan)
     }
+    private var backgroungView: some View {
+        // 画面いっぱいの背景色（グラデーション）実装
+        LinearGradient(gradient: Gradient(colors: [.cyan, .white]), startPoint: .top, endPoint: .bottom)
+            .ignoresSafeArea()
+    }
     
     var body: some View {
         // 画面遷移の設定
         NavigationStack {
             ZStack {
-                // 画面いっぱいの背景色（グラデーション）実装
-                LinearGradient(gradient: Gradient(colors: [.cyan, .white]), startPoint: .top, endPoint: .bottom)
-                    .ignoresSafeArea()
+                backgroungViewgit 
                 VStack {
                     HStack {
                         rainImage
