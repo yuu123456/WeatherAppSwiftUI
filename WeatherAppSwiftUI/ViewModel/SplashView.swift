@@ -15,6 +15,16 @@ struct SplashView: View {
     /// スクリーンのサイズ取得し、３分の１とする（見栄え）
     private let imageWidth = UIScreen.main.bounds.width / 3
     
+    private var appTitle: some View {
+        Text("Weather App！！")
+            .font(.system(.largeTitle, design: .rounded))
+            .fontWeight(.black)
+            .foregroundColor(.yellow)
+            .italic()
+            .opacity(isAnimation ? 1 : 0)
+            .animation(.easeIn.delay(1.5), value: isAnimation)
+    }
+    
     private var rainImage: some View {
         Image(systemName: "cloud.rain")
             .splashImageModefier(width: imageWidth)
@@ -71,6 +81,7 @@ struct SplashView: View {
                         snowImage
                     }
                 }
+                appTitle
             }
             
             .onAppear() {
