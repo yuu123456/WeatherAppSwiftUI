@@ -97,7 +97,6 @@
 			children = (
 				A1ADD3502A56978D00B0F7AA /* SplashViewModel.swift */,
 				A1A3418F2A54FE7D00B545C6 /* MainViewModel.swift */,
-				A1ADD3392A55017B00B0F7AA /* SelectView.swift */,
 				A1D4A8C62A56ED0C004845ED /* SelectViewModel.swift */,
 				A1ADD33B2A55022300B0F7AA /* DetailView.swift */,
 			);
@@ -127,6 +126,7 @@
 			children = (
 				A1A341822A5403C200B545C6 /* SplashView.swift */,
 				A1DDB2F22A56E5DC000415F4 /* MainView.swift */,
+				A1ADD3392A55017B00B0F7AA /* SelectView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
