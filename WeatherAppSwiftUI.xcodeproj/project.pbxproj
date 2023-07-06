@@ -91,6 +91,7 @@
 		A1A341912A54FE8F00B545C6 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				A1A341822A5403C200B545C6 /* SplashView.swift */,
 				A1ADD34E2A567F8F00B0F7AA /* MainViewModel.swift */,
 				A1ADD3392A55017B00B0F7AA /* SelectView.swift */,
 				A1ADD33B2A55022300B0F7AA /* DetailView.swift */,
@@ -119,7 +120,6 @@
 		A1ADD34D2A567EC800B0F7AA /* VIew */ = {
 			isa = PBXGroup;
 			children = (
-				A1A341822A5403C200B545C6 /* SplashView.swift */,
 				A1A3418F2A54FE7D00B545C6 /* MainView.swift */,
 			);
 			path = VIew;
