@@ -6,14 +6,9 @@
 //
 
 import SwiftUI
-
+// View
 struct SplashView: View {
-    /// 画面遷移可否を示す状態変数
-    @State private var isActive = false
-    /// アニメーション可否を示す変数
-    @State var isAnimation = false
-    /// スクリーンのサイズ取得し、３分の１とする（見栄え）
-    private let imageWidth = UIScreen.main.bounds.width / 3
+    @StateObject var splashViewModel = SplashViewModel()
     
     private var appTitle: some View {
         Text("Weather App！！")
@@ -21,45 +16,45 @@ struct SplashView: View {
             .fontWeight(.black)
             .foregroundColor(.yellow)
             .italic()
-            .opacity(isAnimation ? 1 : 0)
-            .animation(.easeIn.delay(1.5), value: isAnimation)
+            .opacity(splashViewModel.isAnimation ? 1 : 0)
+            .animation(.easeIn.delay(1.5), value: splashViewModel.isAnimation)
     }
     
     private var rainImage: some View {
         Image(systemName: "cloud.rain")
-            .splashImageModefier(width: imageWidth)
-            .offset(x: isAnimation ? -20 : 20)
-            .animation(.spring(dampingFraction: 0).repeatForever(), value: isAnimation)
+            .splashImageModefier(width: splashViewModel.imageWidth)
+            .offset(x: splashViewModel.isAnimation ? -20 : 20)
+            .animation(.spring(dampingFraction: 0).repeatForever(), value: splashViewModel.isAnimation)
             .foregroundColor(.blue)
     }
     private var sunImage: some View {
         Image(systemName: "sun.max.fill")
-            .splashImageModefier(width: imageWidth)
-            .rotationEffect(Angle(degrees: isAnimation ? 0 : 360))
-            .animation(.linear(duration: 3).repeatForever(autoreverses: false), value: isAnimation)
+            .splashImageModefier(width: splashViewModel.imageWidth)
+            .rotationEffect(Angle(degrees: splashViewModel.isAnimation ? 0 : 360))
+            .animation(.linear(duration: 3).repeatForever(autoreverses: false), value: splashViewModel.isAnimation)
             .foregroundColor(.red)
     }
     private var cloudImage: some View {
         Image(systemName: "cloud.fill")
-            .splashImageModefier(width: imageWidth)
-            .scaleEffect(isAnimation ? 15 : 1)
-            .animation(.easeIn(duration: 3), value: isAnimation)
+            .splashImageModefier(width: splashViewModel.imageWidth)
+            .scaleEffect(splashViewModel.isAnimation ? 15 : 1)
+            .animation(.easeIn(duration: 3), value: splashViewModel.isAnimation)
             .foregroundColor(.gray)
             // Viewの表示順序を制御するモディファイア（基本はコードの下方が最前面にくるため）
             .zIndex(-1)
     }
     private var boltImage: some View {
         Image(systemName: "cloud.bolt.rain.fill")
-            .splashImageModefier(width: imageWidth)
-            .opacity(isAnimation ? 0 : 1)
-            .animation(.easeInOut(duration: 0.1).repeatForever(), value: isAnimation)
+            .splashImageModefier(width: splashViewModel.imageWidth)
+            .opacity(splashViewModel.isAnimation ? 0 : 1)
+            .animation(.easeInOut(duration: 0.1).repeatForever(), value: splashViewModel.isAnimation)
             .foregroundColor(.yellow)
     }
     private var snowImage: some View {
         Image(systemName: "cloud.snow")
-            .splashImageModefier(width: imageWidth)
-            .offset(y: isAnimation ? -10 : 10)
-            .animation(.easeInOut(duration: 1.5).repeatForever(), value: isAnimation)
+            .splashImageModefier(width: splashViewModel.imageWidth)
+            .offset(y: splashViewModel.isAnimation ? -10 : 10)
+            .animation(.easeInOut(duration: 1.5).repeatForever(), value: splashViewModel.isAnimation)
             .foregroundColor(.cyan)
     }
     private var backgroungView: some View {
@@ -86,17 +81,12 @@ struct SplashView: View {
                 }
                 appTitle
             }
-            
             .onAppear() {
                 // 表示と共にアニメーション起動
-                isAnimation.toggle()
-                // 現在時刻から３秒後に行う処理（時間経過後に自動遷移。タイマーでは画面タップしないと遷移しないため）
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    isActive.toggle()
-                }
+                splashViewModel.displaySplashView()
             }
             // isPresentedの引数trueになればナビゲーション遷移
-            .navigationDestination(isPresented: $isActive) {
+            .navigationDestination(isPresented: $splashViewModel.isActive) {
                 // 遷移先画面
                 MainView()
             }

@@ -17,6 +17,7 @@
 		A1ADD3412A55493300B0F7AA /* PrefectureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1ADD3402A55493300B0F7AA /* PrefectureData.swift */; };
 		A1ADD3462A556BBD00B0F7AA /* CustomModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1ADD3452A556BBD00B0F7AA /* CustomModifier.swift */; };
 		A1ADD3492A5570FB00B0F7AA /* ExImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1ADD3482A5570FB00B0F7AA /* ExImage.swift */; };
+		A1ADD3512A56978D00B0F7AA /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1ADD3502A56978D00B0F7AA /* SplashViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		A1ADD3402A55493300B0F7AA /* PrefectureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefectureData.swift; sourceTree = "<group>"; };
 		A1ADD3452A556BBD00B0F7AA /* CustomModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomModifier.swift; sourceTree = "<group>"; };
 		A1ADD3482A5570FB00B0F7AA /* ExImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExImage.swift; sourceTree = "<group>"; };
+		A1ADD3502A56978D00B0F7AA /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 			children = (
 				A1A341802A5403C200B545C6 /* WeatherAppSwiftUIApp.swift */,
 				A1ADD33F2A5548C400B0F7AA /* Model */,
+				A1ADD3522A569A9600B0F7AA /* View */,
 				A1A341912A54FE8F00B545C6 /* ViewModel */,
 				A1ADD3472A5570DF00B0F7AA /* Extension */,
 				A1A341842A5403C300B545C6 /* Assets.xcassets */,
@@ -86,7 +89,7 @@
 		A1A341912A54FE8F00B545C6 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				A1A341822A5403C200B545C6 /* SplashView.swift */,
+				A1ADD3502A56978D00B0F7AA /* SplashViewModel.swift */,
 				A1A3418F2A54FE7D00B545C6 /* MainView.swift */,
 				A1ADD3392A55017B00B0F7AA /* SelectView.swift */,
 				A1ADD33B2A55022300B0F7AA /* DetailView.swift */,
@@ -109,6 +112,14 @@
 				A1ADD3482A5570FB00B0F7AA /* ExImage.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		A1ADD3522A569A9600B0F7AA /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A1A341822A5403C200B545C6 /* SplashView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -206,6 +217,7 @@
 				A1ADD3492A5570FB00B0F7AA /* ExImage.swift in Sources */,
 				A1ADD3412A55493300B0F7AA /* PrefectureData.swift in Sources */,
 				A1ADD3462A556BBD00B0F7AA /* CustomModifier.swift in Sources */,
+				A1ADD3512A56978D00B0F7AA /* SplashViewModel.swift in Sources */,
 				A1A341832A5403C200B545C6 /* SplashView.swift in Sources */,
 				A1A341902A54FE7D00B545C6 /* MainView.swift in Sources */,
 				A1ADD33A2A55017B00B0F7AA /* SelectView.swift in Sources */,
