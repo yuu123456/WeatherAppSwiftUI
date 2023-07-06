@@ -72,7 +72,7 @@ struct SplashView: View {
         // 画面遷移の設定
         NavigationStack {
             ZStack {
-                backgroungViewgit 
+                backgroungView
                 VStack {
                     HStack {
                         rainImage
