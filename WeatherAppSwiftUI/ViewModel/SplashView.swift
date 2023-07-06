@@ -32,7 +32,7 @@ struct SplashView: View {
     private var cloudImage: some View {
         Image(systemName: "cloud.fill")
             .splashImageModefier(width: imageWidth)
-            .scaleEffect(isAnimation ? 10 : 1)
+            .scaleEffect(isAnimation ? 15 : 1)
             .animation(.easeIn(duration: 3), value: isAnimation)
             .foregroundColor(.gray)
             // Viewの表示順序を制御するモディファイア（基本はコードの下方が最前面にくるため）
@@ -41,32 +41,38 @@ struct SplashView: View {
     private var boltImage: some View {
         Image(systemName: "cloud.bolt.rain.fill")
             .splashImageModefier(width: imageWidth)
-            .offset(y: isAnimation ? -10 : 10)
-            .animation(.easeInOut(duration: 1.5).repeatForever(), value: isAnimation)
+            .opacity(isAnimation ? 0 : 1)
+            .animation(.easeInOut(duration: 0.1).repeatForever(), value: isAnimation)
             .foregroundColor(.yellow)
     }
     private var snowImage: some View {
         Image(systemName: "cloud.snow")
             .splashImageModefier(width: imageWidth)
-            .opacity(isAnimation ? 0 : 1)
-            .animation(.easeInOut(duration: 0.5).repeatForever(), value: isAnimation)
+            .offset(y: isAnimation ? -10 : 10)
+            .animation(.easeInOut(duration: 1.5).repeatForever(), value: isAnimation)
             .foregroundColor(.cyan)
     }
     
     var body: some View {
         // 画面遷移の設定
         NavigationStack {
-            VStack {
-                HStack {
-                    rainImage
-                    sunImage
-                }
-                cloudImage
-                HStack {
-                    boltImage
-                    snowImage
+            ZStack {
+                // 画面いっぱいの背景色（グラデーション）実装
+                LinearGradient(gradient: Gradient(colors: [.cyan, .white]), startPoint: .top, endPoint: .bottom)
+                    .ignoresSafeArea()
+                VStack {
+                    HStack {
+                        rainImage
+                        sunImage
+                    }
+                    cloudImage
+                    HStack {
+                        boltImage
+                        snowImage
+                    }
                 }
             }
+            
             .onAppear() {
                 // 表示と共にアニメーション起動
                 isAnimation.toggle()
