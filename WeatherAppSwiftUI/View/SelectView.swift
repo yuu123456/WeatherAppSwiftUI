@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SelectView: View {
     @StateObject var selectViewModel = SelectViewModel()
+    /// 画面を閉じるアクションのインスタンス作成
+    @Environment(\.dismiss) private var dismiss
     
     /// 詳細画面に遷移するボタン
     var prefecturesList: some View {
@@ -19,6 +21,7 @@ struct SelectView: View {
                     Button("\(prefecture)") {
                         selectViewModel.tappedCell()
                     }
+                    .tint(Color.black)
                     //モーダル遷移
                     .sheet(isPresented: $selectViewModel.isCellTapped) {
                         DetailView()
@@ -28,9 +31,26 @@ struct SelectView: View {
         }
         .navigationTitle(Text("都道府県の選択"))
     }
+    /// 標準では、現状前画面に戻るボタンの色が変更不可になっているのため、カスタマイズボタンとする
+    var backButton: some View {
+        Button {
+            // 遷移元に戻る
+            dismiss()
+        } label: {
+            Text("Home")
+        }
+        .font(.subheadline)
+        .tint(Color.white)
+    }
     
     var body: some View {
         prefecturesList
+            .navigationBarBackButtonHidden()
+            .toolbar() {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    backButton
+                }
+            }
     }
 }
 
