@@ -84,14 +84,24 @@ struct DetailView: View {
                 .padding(.vertical, 1)
         }
     }
+    //背景色
+    var backgroundView: some View {
+        // 画面いっぱいの背景色（グラデーション）
+        LinearGradient(gradient: Gradient(colors: [.cyan, .white]), startPoint: .top, endPoint: .bottom)
+            .ignoresSafeArea()
+    }
     
     var body: some View {
-        VStack {
-            closeButton
-            header
-            chart
-            list
+        ZStack {
+            backgroundView
+            VStack {
+                closeButton
+                header
+                chart
+                list
+            }
         }
+        
     }
 }
 
