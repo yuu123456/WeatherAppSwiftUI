@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct DetailView: View {
-    /// 遷移元を格納する
-    @Environment(\.presentationMode) var presentationMode
+    @StateObject var selectViewModel = SelectViewModel()
+    /// 画面を閉じるアクションのインスタンス作成
+    @Environment(\.dismiss) private var dismiss
     /// 前画面に戻るボタン（左揃え）
     var closeButton: some View {
             HStack {
                 Button {
                     // 遷移元に戻る
-                    presentationMode.wrappedValue.dismiss()
+                    dismiss()
                 } label: {
                     Image(systemName: "xmark")
                 }

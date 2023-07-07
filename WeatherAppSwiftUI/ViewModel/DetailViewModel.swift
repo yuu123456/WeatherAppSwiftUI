@@ -5,4 +5,8 @@
 
 //
 
-import Foundation
+import SwiftUI
+// ViewModel
+class DetailViewModel: ObservableObject {
+
+}
