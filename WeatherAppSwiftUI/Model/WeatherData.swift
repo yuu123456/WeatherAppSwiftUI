@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct WeatherData: Codable {
-    var list: [dataList] = [dataList.init()]
+    var list: [dataList] = [dataList.init(), dataList.init(), dataList.init(), dataList.init(), dataList.init(), dataList.init(), dataList.init(), dataList.init()]
     var city: City = City.init()
 }
 
 struct dataList: Codable {
     var main: Main = Main.init()
-    var weather: [Weather] = [Weather.init(), Weather.init(), Weather.init(), Weather.init()]
+    var weather: [Weather] = [Weather.init()]
     /// 降水確率
     var pop: Double = 25
     /// タイムスタンプ
