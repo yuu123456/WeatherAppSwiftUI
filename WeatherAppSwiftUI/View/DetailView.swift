@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct DetailView: View {
+    /// オブジェクトのインスタンスを監視対象とする属性を付与
+    @ObservedObject var savedWeatherData: SavedWeatherData
+    
     @StateObject var detailViewModel = DetailViewModel()
     /// 画面を閉じるアクションのインスタンス作成
     @Environment(\.dismiss) private var dismiss
@@ -27,7 +30,7 @@ struct DetailView: View {
     /// ヘッダー（都道府県名や日付、グラフタイトル）
     var header: some View {
         VStack {
-            Text("東京都")
+            Text(savedWeatherData.weatherData.city.name)
                 .font(.title)
                 .padding(1)
             Text("2023年12月25日")
@@ -64,7 +67,7 @@ struct DetailView: View {
             Text("12:00")
                 .fixedSize()
                 .padding()
-            Image(systemName: "sun.max.fill")
+            savedWeatherData.weatherImage.iconImege[0]
                 .padding()
             cellData
                 .padding(.horizontal)
@@ -73,13 +76,13 @@ struct DetailView: View {
     /// セルに内包される気温、湿度のデータ
     var cellData: some View {
         VStack(alignment: .leading) {
-            Text("最高気温：24.7℃")
+            Text("最高気温：\(savedWeatherData.weatherData.list[0].main.maxTemp)℃")
                 .fixedSize()
                 .padding(.vertical, 1)
-            Text("最低気温：24.7℃")
+            Text("最低気温：\(savedWeatherData.weatherData.list[0].main.minTemp)℃")
                 .fixedSize()
                 .padding(.vertical, 1)
-            Text("湿度：80％")
+            Text("湿度：\(savedWeatherData.weatherData.list[0].main.humidity)％")
                 .fixedSize()
                 .padding(.vertical, 1)
         }
@@ -107,6 +110,6 @@ struct DetailView: View {
 
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailView()
+        DetailView(savedWeatherData: SavedWeatherData())
     }
 }

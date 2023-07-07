@@ -5,7 +5,7 @@
 
 //
 
-import Foundation
+import SwiftUI
 
 struct WeatherData: Codable {
     var list: [dataList] = [dataList.init()]
@@ -22,8 +22,8 @@ struct dataList: Codable {
 }
 
 struct Main: Codable {
-    var maxTemp: Double = 297.87
-    var minTemp: Double = 297.80
+    var maxTemp: Double = 29.45
+    var minTemp: Double = 26.34
     var humidity: Int = 80
 
     enum CodingKeys: String, CodingKey {
@@ -45,4 +45,8 @@ struct City: Codable {
 struct Coord: Codable {
     var lat: Double = 44.34
     var lon: Double = 10.99
+}
+// コーダブルにできないので仮置き
+struct WeatherImage {
+    var iconImege: [Image] = [Image(systemName: "cloud.rain")]
 }

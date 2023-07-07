@@ -24,7 +24,7 @@ struct SelectView: View {
                     .tint(Color.black)
                     //モーダル遷移
                     .sheet(isPresented: $selectViewModel.isCellTapped) {
-                        DetailView()
+                        DetailView(savedWeatherData: SavedWeatherData())
                     }
                 }
             }
