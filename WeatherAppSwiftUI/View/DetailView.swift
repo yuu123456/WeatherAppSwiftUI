@@ -33,7 +33,7 @@ struct DetailView: View {
             Text(savedWeatherData.weatherData.city.name)
                 .font(.title)
                 .padding(1)
-            Text("2023年12月25日")
+            Text(Date(timeIntervalSince1970: savedWeatherData.weatherData.list[0].dt).formatJapaneseYearDateStyle)
                 .padding(1)
             Text("降水確率")
                 .padding(.horizontal, 1)
@@ -55,7 +55,7 @@ struct DetailView: View {
     }
     /// リストに内包されるセクション
     var section: some View {
-        Section("12月25日") {
+        Section(Date(timeIntervalSince1970: savedWeatherData.weatherData.list[0].dt).formatJapaneseDateStyle) {
             ForEach(0..<4) {_ in
                 cell
             }
@@ -64,7 +64,7 @@ struct DetailView: View {
     /// セクションに内包されるセル
     var cell: some View {
         HStack {
-            Text("12:00")
+            Text(Date(timeIntervalSince1970: savedWeatherData.weatherData.list[0].dt).formatJapaneseTimeStyle)
                 .fixedSize()
                 .padding()
             savedWeatherData.weatherImage.iconImege[0]
@@ -76,10 +76,11 @@ struct DetailView: View {
     /// セルに内包される気温、湿度のデータ
     var cellData: some View {
         VStack(alignment: .leading) {
-            Text("最高気温：\(savedWeatherData.weatherData.list[0].main.maxTemp)℃")
+            // .formatted()でStringと明示的に変換しないと、少数第2以下の0000が表示される（SwiftUIのみ）
+            Text("最高気温：\(savedWeatherData.weatherData.list[0].main.maxTemp.roundToSecondDecimalPlace().formatted())℃")
                 .fixedSize()
                 .padding(.vertical, 1)
-            Text("最低気温：\(savedWeatherData.weatherData.list[0].main.minTemp)℃")
+            Text("最低気温：\(savedWeatherData.weatherData.list[0].main.minTemp.roundToSecondDecimalPlace().formatted())℃")
                 .fixedSize()
                 .padding(.vertical, 1)
             Text("湿度：\(savedWeatherData.weatherData.list[0].main.humidity)％")
