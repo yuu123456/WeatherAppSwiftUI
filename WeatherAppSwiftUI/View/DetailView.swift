@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DetailView: View {
-    @StateObject var selectViewModel = SelectViewModel()
+    @StateObject var detailViewModel = DetailViewModel()
     /// 画面を閉じるアクションのインスタンス作成
     @Environment(\.dismiss) private var dismiss
     /// 前画面に戻るボタン（左揃え）
