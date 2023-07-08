@@ -21,6 +21,8 @@ struct DetailView: View {
                 } label: {
                     Image(systemName: "xmark")
                 }
+                .tint(Color.black)
+                .font(.title2)
                 .padding()
                 Spacer()
             }
@@ -64,6 +66,8 @@ struct DetailView: View {
                 section(sectionIndex: sectionIndex)
             }
         }
+        // スクロールしてもセクションが残るスタイル指定
+        .listStyle(.inset)
     }
     //以下、some Viewに引数を渡せるようにするため、関数型View FunctionBuilderを用いる（またはstructで変数を定義）
     /// リストに内包されるセクション
@@ -91,12 +95,15 @@ struct DetailView: View {
         VStack(alignment: .leading) {
             // .formatted()でStringと明示的に変換しないと、少数第2以下の0000が表示される（SwiftUIのみ）※変換処理は別途レスポンス格納時に実行予定（Viewですべきではない）。
             Text("最高気温：\(detailViewModel.maxTemp(sectionIndex: sectionIndex, cellIndex: cellIndex))℃")
+                .foregroundColor(.red)
                 .fixedSize()
                 .padding(.vertical, 1)
             Text("最低気温：\(detailViewModel.minTemp(sectionIndex: sectionIndex, cellIndex: cellIndex))℃")
+                .foregroundColor(.blue)
                 .fixedSize()
                 .padding(.vertical, 1)
             Text("湿度：\(detailViewModel.humidity(sectionIndex: sectionIndex, cellIndex: cellIndex))％")
+                .foregroundColor(.green)
                 .fixedSize()
                 .padding(.vertical, 1)
         }

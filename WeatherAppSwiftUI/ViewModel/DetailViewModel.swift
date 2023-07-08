@@ -8,7 +8,7 @@
 import SwiftUI
 // ViewModel
 class DetailViewModel: ObservableObject {
-    @Published var chartheiht = UIScreen.main.bounds.height / 4
+    @Published var chartheiht = UIScreen.main.bounds.height / 5
     // Obsarbedかどっちか？
     @ObservedObject var savedWeatherData = SavedWeatherData()
     
