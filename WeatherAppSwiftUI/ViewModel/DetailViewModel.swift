@@ -8,7 +8,7 @@
 import SwiftUI
 // ViewModel
 class DetailViewModel: ObservableObject {
-    @Published var chartheiht = UIScreen.main.bounds.height / 3
+    @Published var chartheiht = UIScreen.main.bounds.height / 4
     // Obsarbedかどっちか？
     @ObservedObject var savedWeatherData = SavedWeatherData()
     
@@ -44,5 +44,16 @@ class DetailViewModel: ObservableObject {
     }
     func humidity(sectionIndex: Int, cellIndex: Int) -> Int {
         savedWeatherData.humiditys[sectionIndex][cellIndex]
+    }
+    
+    /// グラフ用のデータモデルの型に適合させ、戻り値とする。本来はモデル側で処理を記述すべき？
+    func chartsData() -> [ChartsData] {
+        /// グラフ用のデータモデル型の配列を定義（これを戻り値とする）
+        var dataEntrys: [ChartsData] = []
+        for i in 0..<savedWeatherData.times.count {
+            let dataEntry = ChartsData(xValue: savedWeatherData.times[i], yValue: savedWeatherData.pops[i])
+            dataEntrys.append(dataEntry)
+        }
+        return dataEntrys
     }
 }

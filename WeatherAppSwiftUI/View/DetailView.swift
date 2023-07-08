@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Charts
 
 struct DetailView: View {
     @StateObject var detailViewModel = DetailViewModel()
@@ -38,9 +39,24 @@ struct DetailView: View {
     }
     /// グラフ
     var chart: some View {
-        Rectangle()
-            .foregroundColor(.gray)
-            .padding()
+        Chart(detailViewModel.chartsData()) { dataPoint in
+            LineMark(
+                x: .value("時間", dataPoint.xValue),
+                y: .value("降水確率", dataPoint.yValue)
+            )
+        }
+        // X軸の設定
+        .chartXAxis {
+            // 3時間ごとにラベルをつける（表示間隔の調整）
+            AxisMarks(values: .stride(by: .hour, count: 3)) { date in
+                // グリッドラインの表示
+                AxisGridLine()
+                // ラベルの形式を指定
+                AxisValueLabel(format: .dateTime.hour(.twoDigits(amPM: .omitted)).minute())
+            }
+        }
+        .frame(height: detailViewModel.chartheiht)
+        .padding()
     }
     var list: some View {
         List {
@@ -95,11 +111,16 @@ struct DetailView: View {
     var body: some View {
         ZStack {
             backgroundView
-            VStack {
-                closeButton
-                header
-                chart
-                list
+            ZStack {
+                VStack {
+                    closeButton
+                    Spacer()
+                }
+                VStack {
+                    header
+                    chart
+                    list
+                }
             }
         }
         

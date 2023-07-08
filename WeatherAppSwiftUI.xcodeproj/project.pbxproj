@@ -25,6 +25,7 @@
 		A1D4A8CF2A57FE84004845ED /* ExDouble.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D4A8CE2A57FE84004845ED /* ExDouble.swift */; };
 		A1D4A8D12A57FEF9004845ED /* ExDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D4A8D02A57FEF9004845ED /* ExDateFormatter.swift */; };
 		A1D4A8D32A57FFD6004845ED /* ExDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D4A8D22A57FFD6004845ED /* ExDate.swift */; };
+		A1D4A8D52A595882004845ED /* ChartsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D4A8D42A595882004845ED /* ChartsData.swift */; };
 		A1DDB2F12A56E561000415F4 /* ExButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DDB2F02A56E561000415F4 /* ExButton.swift */; };
 		A1DDB2F32A56E5DC000415F4 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DDB2F22A56E5DC000415F4 /* MainView.swift */; };
 /* End PBXBuildFile section */
@@ -50,6 +51,7 @@
 		A1D4A8CE2A57FE84004845ED /* ExDouble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExDouble.swift; sourceTree = "<group>"; };
 		A1D4A8D02A57FEF9004845ED /* ExDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExDateFormatter.swift; sourceTree = "<group>"; };
 		A1D4A8D22A57FFD6004845ED /* ExDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExDate.swift; sourceTree = "<group>"; };
+		A1D4A8D42A595882004845ED /* ChartsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsData.swift; sourceTree = "<group>"; };
 		A1DDB2F02A56E561000415F4 /* ExButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExButton.swift; sourceTree = "<group>"; };
 		A1DDB2F22A56E5DC000415F4 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,6 +124,7 @@
 				A1D4A8CA2A57D9DB004845ED /* WeatherData.swift */,
 				A1ADD3452A556BBD00B0F7AA /* CustomModifier.swift */,
 				A1D4A8CC2A57F0B4004845ED /* SavedWeatherData.swift */,
+				A1D4A8D42A595882004845ED /* ChartsData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 				A1ADD33C2A55022300B0F7AA /* DetailView.swift in Sources */,
 				A1A341812A5403C200B545C6 /* WeatherAppSwiftUIApp.swift in Sources */,
 				A1D4A8D12A57FEF9004845ED /* ExDateFormatter.swift in Sources */,
+				A1D4A8D52A595882004845ED /* ChartsData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

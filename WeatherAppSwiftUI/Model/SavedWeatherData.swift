@@ -19,8 +19,8 @@ class SavedWeatherData: ObservableObject {
     var iconImeges: [[Image]] = [[Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain")],
                                [Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain")]]
     
-    var times: [Date] = [Date(), Date(), Date(), Date(), Date(), Date(), Date(), Date()]
-    var pops: [Double] = [50, 50, 50, 50, 50, 50, 50, 50]
+    var times: [Date] = [Date(), Date() + 3 * 3600, Date() + 3 * 3600 * 2, Date() + 3 * 3600 * 4, Date() + 3 * 3600 * 5, Date() + 3 * 3600 * 6, Date() + 3 * 3600 * 7, Date() + 3 * 3600 * 8]
+    var pops: [Int] = [20, 50, 30, 60, 50, 70, 90, 0]
     
     var city: String = "埼玉"
     var lan: Double = 35.81183
