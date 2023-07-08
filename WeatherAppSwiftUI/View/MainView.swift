@@ -50,7 +50,7 @@ struct MainView: View {
         }
         //モーダル遷移
         .sheet(isPresented: $mainViewModel.isGetLocationButtonTapped) {
-            DetailView(savedWeatherData: SavedWeatherData())
+            DetailView()
         }
     }
 

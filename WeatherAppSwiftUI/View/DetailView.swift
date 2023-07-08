@@ -8,9 +8,6 @@
 import SwiftUI
 
 struct DetailView: View {
-    /// オブジェクトのインスタンスを監視対象とする属性を付与
-    @ObservedObject var savedWeatherData: SavedWeatherData
-    
     @StateObject var detailViewModel = DetailViewModel()
     /// 画面を閉じるアクションのインスタンス作成
     @Environment(\.dismiss) private var dismiss
@@ -30,10 +27,10 @@ struct DetailView: View {
     /// ヘッダー（都道府県名や日付、グラフタイトル）
     var header: some View {
         VStack {
-            Text(savedWeatherData.city)
+            Text(detailViewModel.city)
                 .font(.title)
                 .padding(1)
-            Text(savedWeatherData.dates[0][0].formatJapaneseYearDateStyle)
+            Text(detailViewModel.today)
                 .padding(1)
             Text("降水確率")
                 .padding(.horizontal, 1)
@@ -45,45 +42,45 @@ struct DetailView: View {
             .foregroundColor(.gray)
             .padding()
     }
-    /// リスト全体
     var list: some View {
         List {
-            ForEach(0..<savedWeatherData.dates.count) {_ in
-                section
+            ForEach(0..<detailViewModel.sectionCount) {sectionIndex in
+                section(sectionIndex: sectionIndex)
             }
         }
     }
+    //以下、some Viewに引数を渡せるようにするため、関数型View FunctionBuilderを用いる（またはstructで変数を定義）
     /// リストに内包されるセクション
-    var section: some View {
-        Section(savedWeatherData.dates[0][0].formatJapaneseDateStyle) {
-            ForEach(0..<$savedWeatherData.dates[0].count) {_ in
-                cell
+    func section(sectionIndex: Int) -> some View {
+        Section(detailViewModel.sectionDate(sectionIndex: sectionIndex)) {
+            ForEach(0..<detailViewModel.cellCount(section: sectionIndex)) {cellIndex in
+                cell(sectionIndex: sectionIndex, cellIndex: cellIndex)
             }
         }
     }
     /// セクションに内包されるセル
-    var cell: some View {
+    func cell(sectionIndex: Int, cellIndex: Int) -> some View {
         HStack {
-            Text(savedWeatherData.dates[0][0].formatJapaneseTimeStyle)
+            Text(detailViewModel.time(sectionIndex: sectionIndex, cell: cellIndex))
                 .fixedSize()
                 .padding()
-            savedWeatherData.iconImeges[0][0]
+            detailViewModel.iconImage(sectionIndex: sectionIndex, cellIndex: cellIndex)
                 .padding()
-            cellData
+            cellData(sectionIndex: sectionIndex, cellIndex: cellIndex)
                 .padding(.horizontal)
         }
     }
     /// セルに内包される気温、湿度のデータ
-    var cellData: some View {
+    func cellData(sectionIndex: Int, cellIndex: Int) -> some View {
         VStack(alignment: .leading) {
             // .formatted()でStringと明示的に変換しないと、少数第2以下の0000が表示される（SwiftUIのみ）※変換処理は別途レスポンス格納時に実行予定（Viewですべきではない）。
-            Text("最高気温：\(savedWeatherData.maxTemps[0][0].roundToSecondDecimalPlace().formatted())℃")
+            Text("最高気温：\(detailViewModel.maxTemp(sectionIndex: sectionIndex, cellIndex: cellIndex))℃")
                 .fixedSize()
                 .padding(.vertical, 1)
-            Text("最低気温：\(savedWeatherData.minTemps[0][0].roundToSecondDecimalPlace().formatted())℃")
+            Text("最低気温：\(detailViewModel.minTemp(sectionIndex: sectionIndex, cellIndex: cellIndex))℃")
                 .fixedSize()
                 .padding(.vertical, 1)
-            Text("湿度：\(savedWeatherData.humiditys[0][0])％")
+            Text("湿度：\(detailViewModel.humidity(sectionIndex: sectionIndex, cellIndex: cellIndex))％")
                 .fixedSize()
                 .padding(.vertical, 1)
         }
@@ -111,6 +108,6 @@ struct DetailView: View {
 
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailView(savedWeatherData: SavedWeatherData())
+        DetailView()
     }
 }

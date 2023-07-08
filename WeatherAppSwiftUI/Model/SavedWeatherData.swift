@@ -9,7 +9,7 @@ import SwiftUI
 
 class SavedWeatherData: ObservableObject {
     var dates: [[Date]] = [[Date(), Date(), Date()],
-                           [Date(), Date(), Date(), Date(), Date()]]
+                           [Date() + 1000000, Date(), Date(), Date(), Date()]]
     var maxTemps: [[Double]] = [[30, 30, 30],
                                 [30, 30, 30, 30, 30]]
     var minTemps: [[Double]]  = [[30, 30, 30],
@@ -17,7 +17,7 @@ class SavedWeatherData: ObservableObject {
     var humiditys: [[Int]]  = [[30, 30, 30],
                                [30, 30, 30, 30, 30]]
     var iconImeges: [[Image]] = [[Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain")],
-                               [Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain")]]
+                               [Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain")]]
     
     var times: [Date] = [Date(), Date(), Date(), Date(), Date(), Date(), Date(), Date()]
     var pops: [Double] = [50, 50, 50, 50, 50, 50, 50, 50]
