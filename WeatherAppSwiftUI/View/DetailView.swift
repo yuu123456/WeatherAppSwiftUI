@@ -30,10 +30,10 @@ struct DetailView: View {
     /// ヘッダー（都道府県名や日付、グラフタイトル）
     var header: some View {
         VStack {
-            Text(savedWeatherData.weatherData.city.name)
+            Text(savedWeatherData.city)
                 .font(.title)
                 .padding(1)
-            Text(Date(timeIntervalSince1970: savedWeatherData.weatherData.list[0].dt).formatJapaneseYearDateStyle)
+            Text(savedWeatherData.dates[0][0].formatJapaneseYearDateStyle)
                 .padding(1)
             Text("降水確率")
                 .padding(.horizontal, 1)
@@ -48,15 +48,15 @@ struct DetailView: View {
     /// リスト全体
     var list: some View {
         List {
-            ForEach(0..<2) {_ in
+            ForEach(0..<savedWeatherData.dates.count) {_ in
                 section
             }
         }
     }
     /// リストに内包されるセクション
     var section: some View {
-        Section(Date(timeIntervalSince1970: savedWeatherData.weatherData.list[0].dt).formatJapaneseDateStyle) {
-            ForEach(0..<4) {_ in
+        Section(savedWeatherData.dates[0][0].formatJapaneseDateStyle) {
+            ForEach(0..<$savedWeatherData.dates[0].count) {_ in
                 cell
             }
         }
@@ -64,10 +64,10 @@ struct DetailView: View {
     /// セクションに内包されるセル
     var cell: some View {
         HStack {
-            Text(Date(timeIntervalSince1970: savedWeatherData.weatherData.list[0].dt).formatJapaneseTimeStyle)
+            Text(savedWeatherData.dates[0][0].formatJapaneseTimeStyle)
                 .fixedSize()
                 .padding()
-            savedWeatherData.weatherImage.iconImege[0]
+            savedWeatherData.iconImeges[0][0]
                 .padding()
             cellData
                 .padding(.horizontal)
@@ -76,14 +76,14 @@ struct DetailView: View {
     /// セルに内包される気温、湿度のデータ
     var cellData: some View {
         VStack(alignment: .leading) {
-            // .formatted()でStringと明示的に変換しないと、少数第2以下の0000が表示される（SwiftUIのみ）
-            Text("最高気温：\(savedWeatherData.weatherData.list[0].main.maxTemp.roundToSecondDecimalPlace().formatted())℃")
+            // .formatted()でStringと明示的に変換しないと、少数第2以下の0000が表示される（SwiftUIのみ）※変換処理は別途レスポンス格納時に実行予定（Viewですべきではない）。
+            Text("最高気温：\(savedWeatherData.maxTemps[0][0].roundToSecondDecimalPlace().formatted())℃")
                 .fixedSize()
                 .padding(.vertical, 1)
-            Text("最低気温：\(savedWeatherData.weatherData.list[0].main.minTemp.roundToSecondDecimalPlace().formatted())℃")
+            Text("最低気温：\(savedWeatherData.minTemps[0][0].roundToSecondDecimalPlace().formatted())℃")
                 .fixedSize()
                 .padding(.vertical, 1)
-            Text("湿度：\(savedWeatherData.weatherData.list[0].main.humidity)％")
+            Text("湿度：\(savedWeatherData.humiditys[0][0])％")
                 .fixedSize()
                 .padding(.vertical, 1)
         }

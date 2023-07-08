@@ -5,15 +5,24 @@
 
 //
 
-import Foundation
-/// モデルのデータを監視可能にするためのプロトコルに準拠する
+import SwiftUI
+
 class SavedWeatherData: ObservableObject {
-    // 変化を同期させるために属性の付与
-    @Published var weatherImage: WeatherImage = WeatherImage()
-    @Published var weatherData: WeatherData = WeatherData()
-//    @Published var list: dataList = dataList()
-//    @Published var main: Main = Main()
-//    @Published var weather: Weather = Weather()
-//    @Published var city: City = City()
-//    @Published var coord: Coord = Coord()
+    var dates: [[Date]] = [[Date(), Date(), Date()],
+                           [Date(), Date(), Date(), Date(), Date()]]
+    var maxTemps: [[Double]] = [[30, 30, 30],
+                                [30, 30, 30, 30, 30]]
+    var minTemps: [[Double]]  = [[30, 30, 30],
+                                 [30, 30, 30, 30, 30]]
+    var humiditys: [[Int]]  = [[30, 30, 30],
+                               [30, 30, 30, 30, 30]]
+    var iconImeges: [[Image]] = [[Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain")],
+                               [Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain")]]
+    
+    var times: [Date] = [Date(), Date(), Date(), Date(), Date(), Date(), Date(), Date()]
+    var pops: [Double] = [50, 50, 50, 50, 50, 50, 50, 50]
+    
+    var city: String = "埼玉"
+    var lan: Double = 35.81183
+    var lon: Double = 139.40863
 }
