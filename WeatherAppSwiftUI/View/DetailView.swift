@@ -69,8 +69,8 @@ struct DetailView: View {
             }
             .listRowBackground(Color.clear)
         }
-        // スクロールしてもセクションが残るスタイル指定
-        .listStyle(.inset)
+        // スクロールするとセクションが見えなくなるが、背景が透明なスタイル指定
+        .listStyle(.insetGrouped)
         // スクロール可能なViewの背景を非表示にする
         .scrollContentBackground(.hidden)
         .background(Color.clear)
