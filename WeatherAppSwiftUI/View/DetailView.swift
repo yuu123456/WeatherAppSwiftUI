@@ -62,6 +62,7 @@ struct DetailView: View {
     }
     var list: some View {
         List {
+            // idを付与しないと、警告が出る
             ForEach(0..<detailViewModel.sectionCount, id: \.self) {sectionIndex in
                 section(sectionIndex: sectionIndex)
             }
