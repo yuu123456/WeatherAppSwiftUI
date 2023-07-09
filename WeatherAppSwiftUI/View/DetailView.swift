@@ -62,7 +62,7 @@ struct DetailView: View {
     }
     var list: some View {
         List {
-            ForEach(0..<detailViewModel.sectionCount) {sectionIndex in
+            ForEach(0..<detailViewModel.sectionCount, id: \.self) {sectionIndex in
                 section(sectionIndex: sectionIndex)
             }
         }
@@ -73,7 +73,7 @@ struct DetailView: View {
     /// リストに内包されるセクション
     func section(sectionIndex: Int) -> some View {
         Section(detailViewModel.sectionDate(sectionIndex: sectionIndex)) {
-            ForEach(0..<detailViewModel.cellCount(section: sectionIndex)) {cellIndex in
+            ForEach(0..<detailViewModel.cellCount(section: sectionIndex), id: \.self) {cellIndex in
                 cell(sectionIndex: sectionIndex, cellIndex: cellIndex)
             }
         }
