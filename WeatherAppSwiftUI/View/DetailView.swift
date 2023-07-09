@@ -38,6 +38,7 @@ struct DetailView: View {
             Text("降水確率")
                 .padding(.horizontal, 1)
         }
+        .foregroundColor(Color.black)
     }
     /// グラフ
     var chart: some View {
@@ -66,18 +67,32 @@ struct DetailView: View {
             ForEach(0..<detailViewModel.sectionCount, id: \.self) {sectionIndex in
                 section(sectionIndex: sectionIndex)
             }
+            .listRowBackground(Color.clear)
         }
         // スクロールしてもセクションが残るスタイル指定
         .listStyle(.inset)
+        // スクロール可能なViewの背景を非表示にする
+        .scrollContentBackground(.hidden)
+        .background(Color.clear)
     }
     //以下、some Viewに引数を渡せるようにするため、関数型View FunctionBuilderを用いる（またはstructで変数を定義）
     /// リストに内包されるセクション
     func section(sectionIndex: Int) -> some View {
-        Section(detailViewModel.sectionDate(sectionIndex: sectionIndex)) {
+        Section {
+            // １セクション辺りの内容
             ForEach(0..<detailViewModel.cellCount(section: sectionIndex), id: \.self) {cellIndex in
                 cell(sectionIndex: sectionIndex, cellIndex: cellIndex)
             }
+        } header: {
+            sectionHeader(sectionIndex: sectionIndex)
         }
+    }
+    /// セクションに表示する内容
+    func sectionHeader(sectionIndex: Int) -> some View {
+        Text(detailViewModel.sectionDate(sectionIndex: sectionIndex))
+//            .background(Color.clear)
+            .foregroundColor(Color.black)
+            .font(.headline)
     }
     /// セクションに内包されるセル
     func cell(sectionIndex: Int, cellIndex: Int) -> some View {
@@ -90,6 +105,7 @@ struct DetailView: View {
             cellData(sectionIndex: sectionIndex, cellIndex: cellIndex)
                 .padding(.horizontal)
         }
+        .foregroundColor(Color.black)
     }
     /// セルに内包される気温、湿度のデータ
     func cellData(sectionIndex: Int, cellIndex: Int) -> some View {
