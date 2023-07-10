@@ -13,6 +13,9 @@ class MainViewModel: ObservableObject {
     @Published var isGetLocationButtonTapped = false
     /// 通知予約の有無を示す変数
     @Published var isNotification = false
+    
+    @ObservedObject var locationClient = LocationClient.shared
+    
     /// 通知アイコン名を返すメソッド
     func noticationImageName() -> String {
         switch isNotification {
@@ -29,5 +32,6 @@ class MainViewModel: ObservableObject {
     /// 現在地取得ボタンがタップされた時の処理
     func tappedGetLocationButton() {
         isGetLocationButtonTapped.toggle()
+        locationClient.requestLocation()
     }
 }
