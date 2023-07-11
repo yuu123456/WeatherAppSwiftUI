@@ -33,5 +33,7 @@ class MainViewModel: ObservableObject {
     func tappedGetLocationButton() {
         isGetLocationButtonTapped.toggle()
         locationClient.requestLocation()
+        // 実験用
+        API.share.getSelectedWeather(cityName: "東京都")
     }
 }
