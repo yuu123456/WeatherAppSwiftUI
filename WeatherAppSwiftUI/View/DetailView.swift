@@ -12,6 +12,8 @@ struct DetailView: View {
     @StateObject var detailViewModel = DetailViewModel()
     /// 画面を閉じるアクションのインスタンス作成
     @Environment(\.dismiss) private var dismiss
+    // グラフの高さ指定
+    private var chartHeight = UIScreen.main.bounds.height / 5
     /// 前画面に戻るボタン（左揃え）
     var closeButton: some View {
             HStack {
@@ -58,7 +60,7 @@ struct DetailView: View {
                 AxisValueLabel(format: .dateTime.hour(.twoDigits(amPM: .omitted)).minute())
             }
         }
-        .frame(height: detailViewModel.chartheiht)
+        .frame(height: chartHeight)
         .padding()
     }
     var list: some View {

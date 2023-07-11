@@ -8,6 +8,7 @@ import SwiftUI
 // View
 struct MainView: View {
     @StateObject private var mainViewModel = MainViewModel()
+    private var buttonWidth = UIScreen.main.bounds.width / 1.5
 
     /// ナビゲーションバーの設定を行うメソッド
     func setupNavigationBar() {
@@ -32,7 +33,7 @@ struct MainView: View {
             } label: {
                 Label("都道府県を選択", systemImage: "location")
             }
-            .mainViewButtonModefier(width: mainViewModel.buttonWidth)
+            .mainViewButtonModefier(width: buttonWidth)
         }
         .navigationDestination(isPresented: $mainViewModel.isSelectPrefectureButtonTapped) {
             SelectView()
@@ -46,7 +47,7 @@ struct MainView: View {
             } label: {
                 Label("現在地を取得", systemImage: "list.bullet")
             }
-            .mainViewButtonModefier(width: mainViewModel.buttonWidth)
+            .mainViewButtonModefier(width: buttonWidth)
         }
         //モーダル遷移
         .sheet(isPresented: $mainViewModel.isGetLocationButtonTapped) {
