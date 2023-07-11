@@ -52,14 +52,22 @@ struct DetailView: View {
         }
         // X軸の設定
         .chartXAxis {
-            // 3時間ごとにラベルをつける（表示間隔の調整）
-            AxisMarks(values: .stride(by: .hour, count: 3)) { date in
+            // 3時間ごとにラベルをつける（表示間隔の調整)
+            AxisMarks(values: .stride(by: .hour, count: 3), content: { value in
                 // グリッドラインの表示
                 AxisGridLine()
+                AxisTick()
                 // ラベルの形式を指定
-                AxisValueLabel(format: .dateTime.hour(.twoDigits(amPM: .omitted)).minute())
-            }
+                AxisValueLabel(content: {
+                    let time = detailViewModel.savedWeatherData.times[value.index]
+                    Text(time.formatJapaneseTimeStyle)
+                })
+            })
         }
+        // Y軸に単位ラベル表示
+        .chartYAxisLabel(position: .topTrailing, content: {
+            Text("%")
+        })
         .frame(height: chartHeight)
         .padding()
     }
