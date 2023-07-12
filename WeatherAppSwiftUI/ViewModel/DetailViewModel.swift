@@ -11,6 +11,8 @@ class DetailViewModel: ObservableObject {
     @ObservedObject var savedWeatherData = SavedWeatherData()
     @ObservedObject var locationClient = LocationClient.shared
     
+    @Published var isLoading = true
+
     ///セクションの数を返すメソッド。メソッドでまたはコンピューテッドプロパティでしか、savedWeatherDataを参照できないため
     var sectionCount: Int {
         savedWeatherData.dates.count
@@ -54,5 +56,68 @@ class DetailViewModel: ObservableObject {
             dataEntrys.append(dataEntry)
         }
         return dataEntrys
+    }
+    
+    func getWeatherData() {
+        isLoading = true
+        API.share.sendAPIRequest(savedWeatherData: savedWeatherData) { result in
+            switch result {
+            case .success(let weather):
+                print("データ取得成功")
+//                print(weather)
+                self.saveAPIResponse(response: weather)
+            case .failure(let error):
+                print("データ取得失敗")
+//                print(error)
+            }
+        }
+        API.share.apiCompletionHandler = { [weak self] in
+            print("通信完了")
+            self!.isLoading = false
+            print(self!.isLoading)
+        }
+    }
+    func saveAPIResponse(response: WeatherData) {
+        var dateStringArray: [String] = []
+        
+        savedWeatherData.times = []
+        savedWeatherData.pops = []
+        savedWeatherData.dates = []
+        savedWeatherData.maxTemps = []
+        savedWeatherData.minTemps = []
+        savedWeatherData.humiditys = []
+        savedWeatherData.city = response.city.name
+        print("格納します")
+
+        for weatherData in response.list {
+            let date = Date(timeIntervalSince1970: weatherData.dt)
+            let pop = weatherData.pop * 100
+            let dateString = date.formatJapaneseDateStyle
+            let maxTemp = weatherData.main.maxTemp
+            let minTemp = weatherData.main.minTemp
+            let humidity = weatherData.main.humidity
+            savedWeatherData.times.append(date)
+            savedWeatherData.pops.append(Int(pop))
+            
+            // 同じ日付を含んでいればインデックス番号取得しその配列に要素を追加、そうでなければ新たな配列として追加
+            if let index = dateStringArray.firstIndex(where: {$0 == dateString}) {
+                // 含んでいるとき
+                savedWeatherData.dates[index].append(date)
+                savedWeatherData.maxTemps[index].append(maxTemp)
+                savedWeatherData.minTemps[index].append(minTemp)
+                savedWeatherData.humiditys[index].append(humidity)
+            } else {
+                // 含んでいないとき
+                dateStringArray.append(dateString)
+                savedWeatherData.dates.append([date])
+                savedWeatherData.maxTemps.append([maxTemp])
+                savedWeatherData.minTemps.append([minTemp])
+                savedWeatherData.humiditys.append([humidity])
+            }
+            if savedWeatherData.times.count == response.list.count {
+                print("取得終了、ハンドラ呼び出し")
+                API.share.apiCompletionHandler?()
+            }
+        }
     }
 }

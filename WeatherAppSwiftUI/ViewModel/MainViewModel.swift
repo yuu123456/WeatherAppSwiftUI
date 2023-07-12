@@ -14,6 +14,7 @@ class MainViewModel: ObservableObject {
     @Published var isNotification = false
     
     @ObservedObject var locationClient = LocationClient.shared
+    @ObservedObject var savedWeatherData = SavedWeatherData()
     
     /// 通知アイコン名を返すメソッド
     func noticationImageName() -> String {
@@ -30,9 +31,7 @@ class MainViewModel: ObservableObject {
     }
     /// 現在地取得ボタンがタップされた時の処理
     func tappedGetLocationButton() {
-        isGetLocationButtonTapped.toggle()
+        self.isGetLocationButtonTapped.toggle()
         locationClient.requestLocation()
-        // 実験用
-        API.share.getSelectedWeather(cityName: "東京都")
     }
 }

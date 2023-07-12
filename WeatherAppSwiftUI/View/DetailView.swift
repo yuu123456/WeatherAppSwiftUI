@@ -12,8 +12,10 @@ struct DetailView: View {
     @StateObject var detailViewModel = DetailViewModel()
     /// 画面を閉じるアクションのインスタンス作成
     @Environment(\.dismiss) private var dismiss
+
     // グラフの高さ指定
     private var chartHeight = UIScreen.main.bounds.height / 5
+
     /// 前画面に戻るボタン（左揃え）
     var closeButton: some View {
             HStack {
@@ -110,8 +112,8 @@ struct DetailView: View {
             Text(detailViewModel.time(sectionIndex: sectionIndex, cell: cellIndex))
                 .fixedSize()
                 .padding()
-            detailViewModel.iconImage(sectionIndex: sectionIndex, cellIndex: cellIndex)
-                .padding()
+//            detailViewModel.iconImage(sectionIndex: sectionIndex, cellIndex: cellIndex)
+//                .padding()
             cellData(sectionIndex: sectionIndex, cellIndex: cellIndex)
                 .padding(.horizontal)
         }
@@ -141,23 +143,42 @@ struct DetailView: View {
         LinearGradient(gradient: Gradient(colors: [.cyan, .white]), startPoint: .top, endPoint: .bottom)
             .ignoresSafeArea()
     }
+    // 集約画面
+    var detailMainView: some View {
+        ZStack {
+            VStack {
+                closeButton
+                Spacer()
+            }
+            VStack {
+                header
+                chart
+                list
+            }
+        }
+        .onAppear() {
+            print("詳細画面表示")
+        }
+    }
+    
+    // 読込み画面
+    var loadingView: some View {
+        ProgressView()
+            .onAppear() {
+                print("読込み画面表示")
+                detailViewModel.getWeatherData()
+            }
+    }
     
     var body: some View {
         ZStack {
             backgroundView
-            ZStack {
-                VStack {
-                    closeButton
-                    Spacer()
-                }
-                VStack {
-                    header
-                    chart
-                    list
-                }
+            if detailViewModel.isLoading {
+                loadingView
+            } else {
+                detailMainView
             }
         }
-        
     }
 }
 

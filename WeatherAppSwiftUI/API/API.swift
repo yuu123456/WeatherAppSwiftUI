@@ -9,7 +9,13 @@ import Alamofire
 import Foundation
 
 class API {
+//    @ObservedObject var savedWeatherData = SavedWeatherData()
     static let share = API()
+    var selectLocation = String()
+    // 通信読み込み中
+    var isLoading = true
+    
+    var apiCompletionHandler: (() -> Void)?
     
     private let baseURLString = "https://api.openweathermap.org"
     private let path: String = "/data/2.5/forecast"
@@ -37,12 +43,14 @@ class API {
         ]
         return parameters
     }
+    var urlString: String {
+        buildURLString()
+    }
     
-    func getSelectedWeather(cityName: String) {
-        let urlString = buildURLString()
+    func sendAPIRequest(savedWeatherData: SavedWeatherData, completion: @escaping (Result<WeatherData, Error>) -> Void) {
         var baseParameters = buildBaseParameters()
         // 固有のパラメータを追加する。辞書型のため、appendではない
-        baseParameters.updateValue(cityName, forKey: "q")
+        baseParameters.updateValue(selectLocation, forKey: "q")
         
         AF.request(urlString, method: method, parameters: baseParameters).response { response in
             guard let data = response.data else {
@@ -51,14 +59,16 @@ class API {
             }
             let decoder = JSONDecoder()
             do {
-                let weatherData: WeatherData = try decoder.decode(WeatherData.self, from: data)
-                print(weatherData)
+                print("成功")
+                let response = try decoder.decode(WeatherData.self, from: data)
+//                print(response)
+                completion(Result.success(response))
             } catch {
                 print("失敗")
                 print(error.localizedDescription)
+                completion(Result.failure(response as! Error))
             }
         }
         print("リクエストした")
     }
-    
 }
