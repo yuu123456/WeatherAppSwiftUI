@@ -9,7 +9,6 @@ import SwiftUI
 // ViewModel
 class SplashViewModel: ObservableObject {
     // ObservableObjectプロトコルに準拠したクラス内のプロパティを監視し、変化があった際にViewに対して通知を行う
-    @Published var imageWidth = UIScreen.main.bounds.width / 3
     /// 画面遷移可否を示す状態変数
     @Published var isActive = false
     /// アニメーション可否を示す変数

@@ -8,7 +8,6 @@ import SwiftUI
 // ViewModel
 class MainViewModel: ObservableObject {
     // ObservableObjectプロトコルに準拠したクラス内のプロパティを監視し、変化があった際にViewに対して通知を行う
-    @Published var buttonWidth = UIScreen.main.bounds.width / 1.5
     @Published var isSelectPrefectureButtonTapped = false
     @Published var isGetLocationButtonTapped = false
     /// 通知予約の有無を示す変数

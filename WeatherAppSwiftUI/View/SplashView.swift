@@ -9,6 +9,7 @@ import SwiftUI
 // View
 struct SplashView: View {
     @StateObject var splashViewModel = SplashViewModel()
+    private var imageWidth = UIScreen.main.bounds.width / 3
     
     private var appTitle: some View {
         Text("Weather App！！")
@@ -22,21 +23,21 @@ struct SplashView: View {
     
     private var rainImage: some View {
         Image(systemName: "cloud.rain")
-            .splashImageModefier(width: splashViewModel.imageWidth)
+            .splashImageModefier(width: imageWidth)
             .offset(x: splashViewModel.isAnimation ? -20 : 20)
             .animation(.spring(dampingFraction: 0).repeatForever(), value: splashViewModel.isAnimation)
             .foregroundColor(.blue)
     }
     private var sunImage: some View {
         Image(systemName: "sun.max.fill")
-            .splashImageModefier(width: splashViewModel.imageWidth)
+            .splashImageModefier(width: imageWidth)
             .rotationEffect(Angle(degrees: splashViewModel.isAnimation ? 0 : 360))
             .animation(.linear(duration: 3).repeatForever(autoreverses: false), value: splashViewModel.isAnimation)
             .foregroundColor(.red)
     }
     private var cloudImage: some View {
         Image(systemName: "cloud.fill")
-            .splashImageModefier(width: splashViewModel.imageWidth)
+            .splashImageModefier(width: imageWidth)
             .scaleEffect(splashViewModel.isAnimation ? 15 : 1)
             .animation(.easeIn(duration: 3), value: splashViewModel.isAnimation)
             .foregroundColor(.gray)
@@ -45,14 +46,14 @@ struct SplashView: View {
     }
     private var boltImage: some View {
         Image(systemName: "cloud.bolt.rain.fill")
-            .splashImageModefier(width: splashViewModel.imageWidth)
+            .splashImageModefier(width: imageWidth)
             .opacity(splashViewModel.isAnimation ? 0 : 1)
             .animation(.easeInOut(duration: 0.1).repeatForever(), value: splashViewModel.isAnimation)
             .foregroundColor(.yellow)
     }
     private var snowImage: some View {
         Image(systemName: "cloud.snow")
-            .splashImageModefier(width: splashViewModel.imageWidth)
+            .splashImageModefier(width: imageWidth)
             .offset(y: splashViewModel.isAnimation ? -10 : 10)
             .animation(.easeInOut(duration: 1.5).repeatForever(), value: splashViewModel.isAnimation)
             .foregroundColor(.cyan)
