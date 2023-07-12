@@ -80,6 +80,10 @@ struct MainView: View {
                 toSelectPrefectureViewButton
                 toDetailViewButton
             }
+            // データ取得後に遷移させると想定し、読み込み中画面を表示
+            if mainViewModel.locationClient.isRequesting {
+                ProgressView()
+            }
         }
         .navigationTitle(Text("Home"))
         .navigationBarTitleDisplayMode(.inline)

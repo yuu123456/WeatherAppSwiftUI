@@ -9,6 +9,7 @@ import SwiftUI
 // ViewModel
 class DetailViewModel: ObservableObject {
     @ObservedObject var savedWeatherData = SavedWeatherData()
+    @ObservedObject var locationClient = LocationClient.shared
     
     ///セクションの数を返すメソッド。メソッドでまたはコンピューテッドプロパティでしか、savedWeatherDataを参照できないため
     var sectionCount: Int {
