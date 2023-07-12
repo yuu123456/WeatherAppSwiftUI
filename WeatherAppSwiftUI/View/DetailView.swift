@@ -66,6 +66,10 @@ struct DetailView: View {
                 })
             })
         }
+        // Y軸の設定（オートでは、取得データのうち、降水確率が最高３０だと、３０が上限のグラフになってしまう）
+        .chartYAxis {
+            AxisMarks(values: [0, 25, 50, 75, 100])
+        }
         // Y軸に単位ラベル表示
         .chartYAxisLabel(position: .topTrailing, content: {
             Text("%")
