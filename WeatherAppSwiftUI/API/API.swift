@@ -15,8 +15,6 @@ class API {
     // 通信読み込み中
     var isLoading = true
     
-    var apiCompletionHandler: (() -> Void)?
-    
     private let baseURLString = "https://api.openweathermap.org"
     private let path: String = "/data/2.5/forecast"
     private let method: HTTPMethod = .get

@@ -69,7 +69,7 @@ class DetailViewModel: ObservableObject {
         return dataEntrys
     }
     
-    func getWeatherData() async {
+    func getWeatherData() {
         isLoading = true
         API.share.sendAPIRequest() { result in
             switch result {
@@ -82,12 +82,8 @@ class DetailViewModel: ObservableObject {
 //                print(error)
             }
         }
-        API.share.apiCompletionHandler = { [weak self] in
-            print("通信完了")
-            self!.isLoading = false
-            print(self!.isLoading)
-        }
     }
+    
     func saveAPIResponse(response: WeatherData) {
         var dateStringArray: [String] = []
 
@@ -127,8 +123,8 @@ class DetailViewModel: ObservableObject {
 
             if times.count == response.list.count {
                 savedWeatherData = SavedWeatherData(dates: dates, maxTemps: maxTemps, minTemps: minTemps, humiditys: humiditys, iconImages: iconImages, iconURL: iconURL, times: times, pops: pops, city: city, lat: lat, lon: lon)
-                print("取得終了、ハンドラ呼び出し")
-                API.share.apiCompletionHandler?()
+                print("取得終了")
+                self.isLoading = false
             }
         }
     }
