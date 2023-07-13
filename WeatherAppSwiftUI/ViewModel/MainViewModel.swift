@@ -14,7 +14,6 @@ class MainViewModel: ObservableObject {
     @Published var isNotification = false
     
     @ObservedObject var locationClient = LocationClient.shared
-    @ObservedObject var savedWeatherData = SavedWeatherData()
     
     /// 通知アイコン名を返すメソッド
     func notificationImageName() -> String {

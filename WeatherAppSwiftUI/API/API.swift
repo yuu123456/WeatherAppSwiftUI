@@ -47,7 +47,7 @@ class API {
         buildURLString()
     }
     
-    func sendAPIRequest(savedWeatherData: SavedWeatherData, completion: @escaping (Result<WeatherData, Error>) -> Void) {
+    func sendAPIRequest(completion: @escaping (Result<WeatherData, Error>) -> Void) {
         var baseParameters = buildBaseParameters()
         // 固有のパラメータを追加する。辞書型のため、appendではない
         baseParameters.updateValue(selectLocation, forKey: "q")

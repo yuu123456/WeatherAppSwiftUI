@@ -62,7 +62,7 @@ struct DetailView: View {
                 AxisTick()
                 // ラベルの形式を指定
                 AxisValueLabel(content: {
-                    let time = detailViewModel.savedWeatherData.times[value.index]
+                    let time = detailViewModel.savedWeatherData!.times[value.index]
                     Text(time.formatJapaneseTimeStyle)
                 })
             })
