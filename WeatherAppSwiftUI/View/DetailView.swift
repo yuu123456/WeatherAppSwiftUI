@@ -15,6 +15,7 @@ struct DetailView: View {
 
     // グラフの高さ指定
     private var chartHeight = UIScreen.main.bounds.height / 5
+    private var iconSize = UIScreen.main.bounds.width / 5
 
     /// 前画面に戻るボタン（左揃え）
     var closeButton: some View {
@@ -116,8 +117,17 @@ struct DetailView: View {
             Text(detailViewModel.time(sectionIndex: sectionIndex, cell: cellIndex))
                 .fixedSize()
                 .padding()
-//            detailViewModel.iconImage(sectionIndex: sectionIndex, cellIndex: cellIndex)
-//                .padding()
+            AsyncImage(url: detailViewModel.iconURL(sectionIndex: sectionIndex, cellIndex: cellIndex)) { image in
+                image
+                    .resizable()
+                    .frame(width: iconSize, height: iconSize)
+                    .scaledToFit()
+            } placeholder: {
+                ProgressView()
+                    .frame(width: iconSize, height: iconSize)
+                    .scaledToFit()
+            }
+
             cellData(sectionIndex: sectionIndex, cellIndex: cellIndex)
                 .padding(.horizontal)
         }

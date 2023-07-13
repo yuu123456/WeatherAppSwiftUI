@@ -16,8 +16,9 @@ class SavedWeatherData: ObservableObject {
                                  [30, 30, 30, 30, 30]]
     @Published var humiditys: [[Int]]  = [[30, 30, 30],
                                [30, 30, 30, 30, 30]]
-    @Published var iconImeges: [[Image]] = [[Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain")],
+    @Published var iconImages: [[Image]] = [[Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain")],
                                [Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain"), Image(systemName: "cloud.rain")]]
+    @Published var iconURL: [[URL]] = []
     
     @Published var times: [Date] = [Date(), Date() + 3 * 3600, Date() + 3 * 3600 * 2, Date() + 3 * 3600 * 4, Date() + 3 * 3600 * 5, Date() + 3 * 3600 * 6, Date() + 3 * 3600 * 7, Date() + 3 * 3600 * 8]
     @Published var pops: [Int] = [20, 50, 30, 60, 50, 70, 90, 0]

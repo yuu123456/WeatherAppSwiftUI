@@ -34,9 +34,6 @@ class DetailViewModel: ObservableObject {
     func time(sectionIndex: Int, cell: Int) -> String {
         savedWeatherData.dates[sectionIndex][cell].formatJapaneseTimeStyle
     }
-    func iconImage(sectionIndex: Int, cellIndex: Int) -> Image {
-        savedWeatherData.iconImeges[sectionIndex][cellIndex]
-    }
     func maxTemp(sectionIndex: Int, cellIndex: Int) -> String {
         savedWeatherData.maxTemps[sectionIndex][cellIndex].roundToSecondDecimalPlace().formatted()
     }
@@ -45,6 +42,9 @@ class DetailViewModel: ObservableObject {
     }
     func humidity(sectionIndex: Int, cellIndex: Int) -> Int {
         savedWeatherData.humiditys[sectionIndex][cellIndex]
+    }
+    func iconURL(sectionIndex: Int, cellIndex: Int) -> URL {
+        savedWeatherData.iconURL[sectionIndex][cellIndex]
     }
     
     /// グラフ用のデータモデルの型に適合させ、戻り値とする。本来はモデル側で処理を記述すべき？
@@ -86,6 +86,8 @@ class DetailViewModel: ObservableObject {
         savedWeatherData.maxTemps = []
         savedWeatherData.minTemps = []
         savedWeatherData.humiditys = []
+        savedWeatherData.iconImages = []
+        savedWeatherData.iconURL = []
         savedWeatherData.city = response.city.name
         print("格納します")
 
@@ -96,6 +98,8 @@ class DetailViewModel: ObservableObject {
             let maxTemp = weatherData.main.maxTemp
             let minTemp = weatherData.main.minTemp
             let humidity = weatherData.main.humidity
+            let iconId = weatherData.weather.first!.icon
+            let url = URL(string: "https://openweathermap.org/img/wn/\(iconId)@2x.png")
             savedWeatherData.times.append(date)
             savedWeatherData.pops.append(Int(pop))
             
@@ -106,6 +110,7 @@ class DetailViewModel: ObservableObject {
                 savedWeatherData.maxTemps[index].append(maxTemp)
                 savedWeatherData.minTemps[index].append(minTemp)
                 savedWeatherData.humiditys[index].append(humidity)
+                savedWeatherData.iconURL[index].append(url!)
             } else {
                 // 含んでいないとき
                 dateStringArray.append(dateString)
@@ -113,6 +118,7 @@ class DetailViewModel: ObservableObject {
                 savedWeatherData.maxTemps.append([maxTemp])
                 savedWeatherData.minTemps.append([minTemp])
                 savedWeatherData.humiditys.append([humidity])
+                savedWeatherData.iconURL.append([url!])
             }
             if savedWeatherData.times.count == response.list.count {
                 print("取得終了、ハンドラ呼び出し")
