@@ -69,7 +69,7 @@ class DetailViewModel: ObservableObject {
         return dataEntrys
     }
     
-    func getWeatherData() {
+    func getWeatherData() async {
         isLoading = true
         API.share.sendAPIRequest() { result in
             switch result {

@@ -178,9 +178,9 @@ struct DetailView: View {
     // 読込み画面
     var loadingView: some View {
         ProgressView()
-            .onAppear() {
+            .task {
                 print("読込み画面表示")
-                detailViewModel.getWeatherData()
+                await detailViewModel.getWeatherData()
             }
     }
     
