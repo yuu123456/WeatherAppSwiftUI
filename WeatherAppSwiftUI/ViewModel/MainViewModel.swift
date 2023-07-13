@@ -17,7 +17,7 @@ class MainViewModel: ObservableObject {
     @ObservedObject var savedWeatherData = SavedWeatherData()
     
     /// 通知アイコン名を返すメソッド
-    func noticationImageName() -> String {
+    func notificationImageName() -> String {
         switch isNotification {
         case true:
             return "bell"
