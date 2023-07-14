@@ -9,9 +9,11 @@ import Alamofire
 import Foundation
 
 class API {
-//    @ObservedObject var savedWeatherData = SavedWeatherData()
     static let share = API()
     var selectLocation = String()
+    var latitude = Double()
+    var longitude = Double()
+    
     // 通信読み込み中
     var isLoading = true
     
@@ -47,9 +49,16 @@ class API {
     
     func sendAPIRequest(completion: @escaping (Result<WeatherData, Error>) -> Void) {
         var baseParameters = buildBaseParameters()
-        // 固有のパラメータを追加する。辞書型のため、appendではない
-        baseParameters.updateValue(selectLocation, forKey: "q")
-        
+        // 都道府県を選択済かどうかで判定
+        if selectLocation == String() {
+            // 固有のパラメータを追加する。辞書型のため、appendではない
+            baseParameters.updateValue(latitude, forKey: "lat")
+            baseParameters.updateValue(longitude, forKey: "lon")
+        } else {
+            // 固有のパラメータを追加する。辞書型のため、appendではない
+            baseParameters.updateValue(selectLocation, forKey: "q")
+        }
+
         AF.request(urlString, method: method, parameters: baseParameters).response { response in
             guard let data = response.data else {
                 print("dataが不適切？")
@@ -57,10 +66,10 @@ class API {
             }
             let decoder = JSONDecoder()
             do {
-                print("成功")
                 let response = try decoder.decode(WeatherData.self, from: data)
 //                print(response)
                 completion(Result.success(response))
+                print("成功")
             } catch {
                 print("失敗")
                 print(error.localizedDescription)

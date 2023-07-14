@@ -43,14 +43,17 @@ struct MainView: View {
     var toDetailViewButton: some View {
         NavigationStack {
             Button {
-                mainViewModel.tappedGetLocationButton()
+                Task {
+                    mainViewModel.tappedGetLocationButton()
+                }
+                
             } label: {
                 Label("現在地を取得", systemImage: "list.bullet")
             }
             .mainViewButtonModefier(width: buttonWidth)
         }
         //モーダル遷移
-        .sheet(isPresented: $mainViewModel.isGetLocationButtonTapped) {
+        .sheet(isPresented: $mainViewModel.isDisplayDetailView) {
             DetailView()
         }
     }
@@ -79,10 +82,6 @@ struct MainView: View {
             VStack(spacing: 50) {
                 toSelectPrefectureViewButton
                 toDetailViewButton
-            }
-            // データ取得後に遷移させると想定し、読み込み中画面を表示
-            if mainViewModel.locationClient.isRequesting {
-                ProgressView()
             }
         }
         .navigationTitle(Text("Home"))

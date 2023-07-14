@@ -23,8 +23,6 @@ class DetailViewModel: ObservableObject {
     var city: String = String()
     private var lat: Double = Double()
     private var lon: Double = Double()
-
-    @ObservedObject var locationClient = LocationClient.shared
     
     @Published var isLoading = true
 

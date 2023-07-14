@@ -10,10 +10,6 @@ import CoreLocation
 final class LocationClient: NSObject, ObservableObject {
     private let locationManager = CLLocationManager()
     static let shared = LocationClient()
-    /// 位置情報のリクエスト状態を示す（これを元に、読み込み画面の表示仮実装？）
-    @Published var isRequesting: Bool = false
-    /// 位置情報を収める変数
-    @Published var location: CLLocationCoordinate2D?
     
     private override init() {
         super.init()
@@ -32,15 +28,16 @@ final class LocationClient: NSObject, ObservableObject {
     }
     /// 位置情報を１度だけ取得する
     func requestLocation() {
+        print("リクエスト開始")
         if isAuthorized {
             print("アプリの位置情報取得が許可されています")
             print("位置情報を取得します")
             locationManager.requestLocation()
-            // リクエスト中ステータスOn
-            isRequesting = true
+
         } else {
             print("アプリの位置情報取得が許可されていません")
         }
+        print("リクエスト完了")
     }
     func stopUpdatingLocation() {
         print("位置情報取得を中止します")
@@ -54,19 +51,18 @@ extension LocationClient: CLLocationManagerDelegate {
             print("位置情報の取得成功")
             print("緯度：\(location.latitude)")
             print("経度：\(location.longitude)")
-            // 監視対象変数に格納する
-            LocationClient.shared.location = location
+            // APIに取得した値を送る
+            API.share.latitude = location.latitude
+            API.share.longitude = location.longitude
+            
             // 1つ取得したら止めて良い
             LocationClient.shared.stopUpdatingLocation()
-            // リクエスト中ステータスをOff
-            isRequesting = false
         }
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("位置情報の取得に失敗：\(error)")
         LocationClient.shared.stopUpdatingLocation()
-        LocationClient.shared.isRequesting = false
     }
 
     // 位置情報の許可のステータス変更で呼ばれる
