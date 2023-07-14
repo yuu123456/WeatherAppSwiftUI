@@ -66,7 +66,7 @@ class DetailViewModel: ObservableObject {
         }
         return dataEntrys
     }
-    
+    @MainActor
     func getWeatherData() async {
         isLoading = true
         API.share.sendAPIRequest() { result in
@@ -102,7 +102,6 @@ class DetailViewModel: ObservableObject {
             // 同じ日付を含んでいればインデックス番号取得しその配列に要素を追加、そうでなければ新たな配列として追加
             if let index = dateStringArray.firstIndex(where: {$0 == dateString}) {
                 // 含んでいるとき
-                print("含む")
                 dates[index].append(date)
                 maxTemps[index].append(maxTemp)
                 minTemps[index].append(minTemp)
@@ -110,7 +109,6 @@ class DetailViewModel: ObservableObject {
                 iconURL[index].append(url!)
             } else {
                 // 含んでいないとき
-                print("含まず")
                 dateStringArray.append(dateString)
                 dates.append([date])
                 maxTemps.append([maxTemp])

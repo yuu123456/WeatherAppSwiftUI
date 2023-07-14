@@ -37,7 +37,6 @@ final class LocationClient: NSObject, ObservableObject {
         } else {
             print("アプリの位置情報取得が許可されていません")
         }
-        print("リクエスト完了")
     }
     func stopUpdatingLocation() {
         print("位置情報取得を中止します")
