@@ -61,7 +61,7 @@ struct MainView: View {
             //ダイアログ出す処理を記述
             
         } label: {
-            Image(systemName: mainViewModel.noticationImageName())
+            Image(systemName: mainViewModel.notificationImageName())
                 .tint(.yellow)
         }
     }

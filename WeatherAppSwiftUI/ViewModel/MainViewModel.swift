@@ -16,7 +16,7 @@ class MainViewModel: ObservableObject {
     @ObservedObject var locationClient = LocationClient.shared
     
     /// 通知アイコン名を返すメソッド
-    func noticationImageName() -> String {
+    func notificationImageName() -> String {
         switch isNotification {
         case true:
             return "bell"
@@ -30,7 +30,7 @@ class MainViewModel: ObservableObject {
     }
     /// 現在地取得ボタンがタップされた時の処理
     func tappedGetLocationButton() {
-        isGetLocationButtonTapped.toggle()
+        self.isGetLocationButtonTapped.toggle()
         locationClient.requestLocation()
     }
 }

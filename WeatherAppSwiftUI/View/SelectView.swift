@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SelectView: View {
-    @StateObject var selectViewModel = SelectViewModel()
+    @ObservedObject var selectViewModel = SelectViewModel()
     /// 画面を閉じるアクションのインスタンス作成
     @Environment(\.dismiss) private var dismiss
     
@@ -19,15 +19,18 @@ struct SelectView: View {
                 // 配列の数だけ繰り返し、個別のidとして自身の値を利用する
                 ForEach(PrefectureData.prefectures, id:\.self) {prefecture in
                     Button("\(prefecture)") {
+                        // ViewからViewModelに値を渡し、ViewModelからModelへ
+                        selectViewModel.selectLocation = prefecture
                         selectViewModel.tappedCell()
                     }
-                    .tint(Color.black)
-                    //モーダル遷移
-                    .sheet(isPresented: $selectViewModel.isCellTapped) {
-                        DetailView()
-                    }
                 }
+                
             }
+        }
+        .tint(Color.black)
+        //モーダル遷移 ※NavigationStackに付与すると、DetailViewの.onAppearが１３回も呼ばれる
+        .sheet(isPresented: $selectViewModel.isCellTapped) {
+            DetailView()
         }
         .navigationTitle(Text("都道府県の選択"))
     }
