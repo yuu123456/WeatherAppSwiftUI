@@ -180,7 +180,12 @@ struct DetailView: View {
         ProgressView()
             .task {
                 print("読込み画面表示")
-                LocationClient.shared.requestLocation()
+                if API.share.selectLocation == String() {
+                    
+                } else {
+                    detailViewModel.getWeatherData()
+                }
+                
             }
     }
     

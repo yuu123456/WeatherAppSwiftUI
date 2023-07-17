@@ -34,6 +34,7 @@ class MainViewModel: ObservableObject {
         print("Button Pushed")
         if LocationClient.shared.isAuthorized {
             print("アプリの位置情報取得が許可されています")
+            LocationClient.shared.requestLocation()
             // 詳細画面への遷移フラグをOnにする
             isDisplayDetailView = true
 
