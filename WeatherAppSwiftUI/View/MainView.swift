@@ -31,7 +31,7 @@ struct MainView: View {
             Button {
                 mainViewModel.tappedSelectPrefectureButton()
             } label: {
-                Label("都道府県を選択", systemImage: "location")
+                Label("都道府県を選択", systemImage: "list.bullet")
             }
             .mainViewButtonModifier(width: buttonWidth)
         }
@@ -48,7 +48,7 @@ struct MainView: View {
                 }
                 
             } label: {
-                Label("現在地を取得", systemImage: "list.bullet")
+                Label("現在地を取得", systemImage: "location")
             }
             .mainViewButtonModifier(width: buttonWidth)
         }
