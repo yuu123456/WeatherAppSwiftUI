@@ -64,16 +64,29 @@ struct DetailView: View {
                 AxisValueLabel(content: {
                     let time = detailViewModel.savedWeatherData!.times[value.index]
                     Text(time.formatJapaneseTimeStyle)
+                        .foregroundColor(.black)
                 })
             })
         }
         // Y軸の設定（オートでは、取得データのうち、降水確率が最高３０だと、３０が上限のグラフになってしまう）
         .chartYAxis {
-            AxisMarks(values: [0, 25, 50, 75, 100])
+            let values = [0, 25, 50, 75, 100]
+            AxisMarks(values: values) { value in
+                // グリッドラインの表示
+                AxisGridLine()
+                AxisTick()
+                
+                AxisValueLabel(content: {
+                    let pop = values[value.index]
+                    Text(String(pop))
+                        .foregroundColor(.black)
+                })
+            }
         }
         // Y軸に単位ラベル表示
         .chartYAxisLabel(position: .topTrailing, content: {
             Text("%")
+                .foregroundColor(.black)
         })
         .frame(height: chartHeight)
         .padding()
