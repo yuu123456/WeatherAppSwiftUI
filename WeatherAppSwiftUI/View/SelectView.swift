@@ -24,8 +24,11 @@ struct SelectView: View {
                         selectViewModel.tappedCell()
                     }
                 }
-                
+                .listRowBackground(Color.clear)
             }
+            // スクロール可能なViewの背景を非表示にする
+            .scrollContentBackground(.hidden)
+            .background(Color.clear)
         }
         .tint(Color.black)
         //モーダル遷移 ※NavigationStackに付与すると、DetailViewの.onAppearが１３回も呼ばれる
@@ -46,14 +49,24 @@ struct SelectView: View {
         .tint(Color.white)
     }
     
+    //背景色
+    var backgroundView: some View {
+        // 画面いっぱいの背景色（グラデーション）
+        LinearGradient(gradient: Gradient(colors: [.cyan, .white]), startPoint: .top, endPoint: .bottom)
+            .ignoresSafeArea()
+    }
+    
     var body: some View {
-        prefecturesList
-            .navigationBarBackButtonHidden()
-            .toolbar() {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    backButton
+        ZStack {
+            backgroundView
+            prefecturesList
+                .navigationBarBackButtonHidden()
+                .toolbar() {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        backButton
+                    }
                 }
-            }
+        }
     }
 }
 
