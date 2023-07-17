@@ -139,6 +139,7 @@ struct DetailView: View {
                     .scaledToFit()
             } placeholder: {
                 ProgressView()
+                    .tint(.black)
                     .frame(width: iconSize, height: iconSize)
                     .scaledToFit()
             }
@@ -193,6 +194,8 @@ struct DetailView: View {
     // 読込み画面
     var loadingView: some View {
         ProgressView()
+            .tint(.black)
+            .scaleEffect(2)
             .task {
                 print("読込み画面表示")
                 if API.share.selectLocation == String() {
