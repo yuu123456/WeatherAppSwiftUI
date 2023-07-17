@@ -59,6 +59,7 @@ struct DetailView: View {
             AxisMarks(values: .stride(by: .hour, count: 3), content: { value in
                 // グリッドラインの表示
                 AxisGridLine()
+                    .foregroundStyle(.gray)
                 AxisTick()
                 // ラベルの形式を指定
                 AxisValueLabel(content: {
@@ -74,6 +75,7 @@ struct DetailView: View {
             AxisMarks(values: values) { value in
                 // グリッドラインの表示
                 AxisGridLine()
+                    .foregroundStyle(.gray)
                 AxisTick()
                 
                 AxisValueLabel(content: {
