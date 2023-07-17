@@ -180,7 +180,7 @@ struct DetailView: View {
         ProgressView()
             .task {
                 print("読込み画面表示")
-                await detailViewModel.getWeatherData()
+                LocationClient.shared.requestLocation()
             }
     }
     

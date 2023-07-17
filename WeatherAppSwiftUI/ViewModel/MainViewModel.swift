@@ -5,13 +5,13 @@
 //
 //
 import SwiftUI
+
 // ViewModel
 class MainViewModel: ObservableObject {
     // ObservableObjectプロトコルに準拠したクラス内のプロパティを監視し、変化があった際にViewに対して通知を行う
     @Published var isSelectPrefectureButtonTapped = false
     @Published var isGetLocationButtonTapped = false
     @Published var isDisplayDetailView = false
-
     /// 通知予約の有無を示す変数
     @Published var isNotification = false
     
@@ -32,7 +32,13 @@ class MainViewModel: ObservableObject {
     func tappedGetLocationButton() {
         API.share.selectLocation = String()
         print("Button Pushed")
-        LocationClient.shared.requestLocation()
-        isDisplayDetailView = true
+        if LocationClient.shared.isAuthorized {
+            print("アプリの位置情報取得が許可されています")
+            // 詳細画面への遷移フラグをOnにする
+            isDisplayDetailView = true
+
+        } else {
+            print("アプリの位置情報取得が許可されていません")
+        }
     }
 }

@@ -7,9 +7,20 @@
 
 import CoreLocation
 
+// デリゲートパターン①デリゲートプロトコル、メソッドの定義
+protocol LocationManagerDelegate: AnyObject {
+    /// 位置情報を取得した際に行う処理
+    func didUpdateLocation(_ location: CLLocationCoordinate2D)
+    /// 位置情報取得失敗した際に行う処理
+    func didFailWithError(_ error: Error)
+}
+
 final class LocationClient: NSObject, ObservableObject {
     private let locationManager = CLLocationManager()
     static let shared = LocationClient()
+    
+    // デリゲートパターン②デリゲート変数の定義
+    var delegate: LocationManagerDelegate?
     
     private override init() {
         super.init()
@@ -28,15 +39,8 @@ final class LocationClient: NSObject, ObservableObject {
     }
     /// 位置情報を１度だけ取得する
     func requestLocation() {
-        print("リクエスト開始")
-        if isAuthorized {
-            print("アプリの位置情報取得が許可されています")
-            print("位置情報を取得します")
-            locationManager.requestLocation()
-
-        } else {
-            print("アプリの位置情報取得が許可されていません")
-        }
+        print("位置情報取得リクエスト開始")
+        locationManager.requestLocation()
     }
     func stopUpdatingLocation() {
         print("位置情報取得を中止します")
@@ -49,19 +53,26 @@ extension LocationClient: CLLocationManagerDelegate {
         if let location = locations.last?.coordinate {
             print("位置情報の取得成功")
             print("緯度：\(location.latitude)")
-            print("経度：\(location.longitude)")
-            // APIに取得した値を送る
-            API.share.latitude = location.latitude
-            API.share.longitude = location.longitude
-            
+            print("経度：\(location.longitude)")            
             // 1つ取得したら止めて良い
             LocationClient.shared.stopUpdatingLocation()
+            
+            // デリゲートパターン③処理を任せる側で、デリゲートメソッドを実行
+            if let delegate = delegate {
+                // 取得した位置情報をデリゲートに渡す
+                delegate.didUpdateLocation(location)
+            }
         }
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("位置情報の取得に失敗：\(error)")
         LocationClient.shared.stopUpdatingLocation()
+        // デリゲートパターン③処理を任せる側で、デリゲートメソッドを実行
+        if let delegate = delegate {
+            // 取得した位置情報エラーをデリゲートに渡す
+            delegate.didFailWithError(error)
+        }
     }
 
     // 位置情報の許可のステータス変更で呼ばれる

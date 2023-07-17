@@ -6,10 +6,16 @@
 //
 
 import SwiftUI
+import CoreLocation
 // ViewModel
 class DetailViewModel: ObservableObject {
     // データモデルはオプショナル型で宣言し、最後に値を格納することで、仮データに惑わされないメリット
     @Published var savedWeatherData: SavedWeatherData?
+    
+    // デリゲートパターン⑤処理を任される側で、デリゲートを適用させる
+    init() {
+        LocationClient.shared.delegate = self
+    }
     
     // 仮に格納するための変数を宣言する
     private var dates: [[Date]] = []
@@ -66,9 +72,8 @@ class DetailViewModel: ObservableObject {
         }
         return dataEntrys
     }
-    @MainActor
-    func getWeatherData() async {
-        isLoading = true
+
+    func getWeatherData() {
         API.share.sendAPIRequest() { result in
             switch result {
             case .success(let weather):
@@ -123,5 +128,20 @@ class DetailViewModel: ObservableObject {
                 self.isLoading = false
             }
         }
+    }
+}
+
+// デリゲートパターン④処理を任される側で、Extensionしてデリゲートプロトコルに準拠、デリゲートメソッド内に実行したい処理を記述
+extension DetailViewModel: LocationManagerDelegate {
+    func didUpdateLocation(_ location: CLLocationCoordinate2D) {
+        print("デリゲートで位置情報が渡された")
+        // APIに取得した値を送る
+        API.share.latitude = location.latitude
+        API.share.longitude = location.longitude
+        getWeatherData()
+    }
+    
+    func didFailWithError(_ error: Error) {
+        print("デリゲートで位置情報取得失敗が渡された")
     }
 }

@@ -33,7 +33,7 @@ struct MainView: View {
             } label: {
                 Label("都道府県を選択", systemImage: "location")
             }
-            .mainViewButtonModefier(width: buttonWidth)
+            .mainViewButtonModifier(width: buttonWidth)
         }
         .navigationDestination(isPresented: $mainViewModel.isSelectPrefectureButtonTapped) {
             SelectView()
@@ -50,7 +50,7 @@ struct MainView: View {
             } label: {
                 Label("現在地を取得", systemImage: "list.bullet")
             }
-            .mainViewButtonModefier(width: buttonWidth)
+            .mainViewButtonModifier(width: buttonWidth)
         }
         //モーダル遷移
         .sheet(isPresented: $mainViewModel.isDisplayDetailView) {
