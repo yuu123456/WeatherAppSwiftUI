@@ -12,6 +12,7 @@ class MainViewModel: ObservableObject {
     @Published var isSelectPrefectureButtonTapped = false
     @Published var isGetLocationButtonTapped = false
     @Published var isDisplayDetailView = false
+    @Published var isDisplayNotGetLocDialog = false
     /// 通知予約の有無を示す変数
     @Published var isNotification = false
     
@@ -40,6 +41,7 @@ class MainViewModel: ObservableObject {
 
         } else {
             print("アプリの位置情報取得が許可されていません")
+            isDisplayNotGetLocDialog = true
         }
     }
 }
