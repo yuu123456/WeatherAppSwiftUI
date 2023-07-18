@@ -23,6 +23,17 @@ extension View {
             } message: {
                 Text("端末設定を見直してください")
             }
+    }
+    // APIエラー時のダイアログ
+    func errorAlertModifier(title: String, message: String, isPresented: Binding<Bool>) -> some View {
+        self
+            .alert(title, isPresented: isPresented) {
+                Button("閉じる") {
+                    
+                }
+            } message: {
+                Text(message)
+            }
 
     }
 }

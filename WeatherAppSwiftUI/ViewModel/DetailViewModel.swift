@@ -11,6 +11,10 @@ import CoreLocation
 class DetailViewModel: ObservableObject {
     // データモデルはオプショナル型で宣言し、最後に値を格納することで、仮データに惑わされないメリット
     @Published var savedWeatherData: SavedWeatherData?
+    @Published var isDisplayErrorDialog = false
+
+    @Published var errorTitle: String?
+    @Published var errorMessage: String?
     
     // デリゲートパターン⑤処理を任される側で、デリゲートを適用させる
     init() {
@@ -82,7 +86,10 @@ class DetailViewModel: ObservableObject {
                 self.saveAPIResponse(response: weather)
             case .failure(let error):
                 print("データ取得失敗")
-//                print(error)
+                print(error)
+                self.errorTitle = error.title
+                self.errorMessage = error.message
+                self.isDisplayErrorDialog = true
             }
         }
     }
