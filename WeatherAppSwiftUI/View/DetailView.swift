@@ -212,6 +212,8 @@ struct DetailView: View {
             backgroundView
             if detailViewModel.isLoading {
                 loadingView
+                // 操作の無効化（ただしスワイプバックは無効化できない）
+                    .disabled(true)
             } else {
                 detailMainView
             }
