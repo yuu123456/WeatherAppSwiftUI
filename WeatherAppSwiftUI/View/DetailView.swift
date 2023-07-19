@@ -12,6 +12,8 @@ struct DetailView: View {
     @StateObject var detailViewModel = DetailViewModel()
     /// 画面を閉じるアクションのインスタンス作成
     @Environment(\.dismiss) private var dismiss
+    // 子ViewとしてModelのインスタンスを受け取る
+    @EnvironmentObject var requestParameter: RequestParameter
 
     // グラフの高さ指定
     private var chartHeight = UIScreen.main.bounds.height / 5
@@ -198,12 +200,14 @@ struct DetailView: View {
             .scaleEffect(2)
             .task {
                 print("読込み画面表示")
-                if API.share.selectLocation == String() {
-                    
+                if requestParameter.isFromSelectView! {
+                    if let selectLocation = requestParameter.selectLocation {
+                        print("選択した都道府県から天気取得")
+                        detailViewModel.getSelectedWeatherData(selectLocation: selectLocation)
+                    }
                 } else {
-                    detailViewModel.getWeatherData()
+                    print("位置情報から天気取得（ここでは何もしない。デリゲート待ち）")
                 }
-                
             }
     }
     

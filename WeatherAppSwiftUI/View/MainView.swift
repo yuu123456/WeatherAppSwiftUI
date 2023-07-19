@@ -9,6 +9,8 @@ import SwiftUI
 struct MainView: View {
     @StateObject private var mainViewModel = MainViewModel()
     private var buttonWidth = UIScreen.main.bounds.width / 1.5
+    // 親Viewとする
+    @ObservedObject var requestParameter = RequestParameter()
 
     /// ナビゲーションバーの設定を行うメソッド
     func setupNavigationBar() {
@@ -44,6 +46,7 @@ struct MainView: View {
         NavigationStack {
             Button {
                 Task {
+                    requestParameter.isFromSelectView = false
                     mainViewModel.tappedGetLocationButton()
                 }
                 
@@ -55,6 +58,8 @@ struct MainView: View {
         //モーダル遷移
         .sheet(isPresented: $mainViewModel.isDisplayDetailView) {
             DetailView()
+            // 子Viewに渡す
+                .environmentObject(requestParameter)
         }
     }
 
