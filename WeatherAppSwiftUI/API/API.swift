@@ -81,21 +81,6 @@ class API {
                 print("レスポンス取得失敗")
                 completion(.failure(.connectionError(error)))
             }
-//            guard let data = response.data else {
-//                print("dataが不適切？")
-//                return
-//            }
-//            let decoder = JSONDecoder()
-//            do {
-//                let response = try decoder.decode(WeatherData.self, from: data)
-////                print(response)
-//                completion(Result.success(response))
-//                print("成功")
-//            } catch {
-//                print("失敗")
-//                print(error.localizedDescription)
-//                completion(Result.failure(response as! Error))
-//            }
         }
         print("リクエストした")
     }
