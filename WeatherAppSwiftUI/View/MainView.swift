@@ -9,6 +9,8 @@ import SwiftUI
 struct MainView: View {
     @StateObject private var mainViewModel = MainViewModel()
     private var buttonWidth = UIScreen.main.bounds.width / 1.5
+    // 親Viewとする
+    @ObservedObject var requestParameter = RequestParameter()
 
     /// ナビゲーションバーの設定を行うメソッド
     func setupNavigationBar() {
@@ -31,9 +33,9 @@ struct MainView: View {
             Button {
                 mainViewModel.tappedSelectPrefectureButton()
             } label: {
-                Label("都道府県を選択", systemImage: "location")
+                Label("都道府県を選択", systemImage: "list.bullet")
             }
-            .mainViewButtonModefier(width: buttonWidth)
+            .mainViewButtonModifier(width: buttonWidth)
         }
         .navigationDestination(isPresented: $mainViewModel.isSelectPrefectureButtonTapped) {
             SelectView()
@@ -43,15 +45,21 @@ struct MainView: View {
     var toDetailViewButton: some View {
         NavigationStack {
             Button {
-                mainViewModel.tappedGetLocationButton()
+                Task {
+                    requestParameter.isFromSelectView = false
+                    mainViewModel.tappedGetLocationButton()
+                }
+                
             } label: {
-                Label("現在地を取得", systemImage: "list.bullet")
+                Label("現在地を取得", systemImage: "location")
             }
-            .mainViewButtonModefier(width: buttonWidth)
+            .mainViewButtonModifier(width: buttonWidth)
         }
         //モーダル遷移
-        .sheet(isPresented: $mainViewModel.isGetLocationButtonTapped) {
+        .sheet(isPresented: $mainViewModel.isDisplayDetailView) {
             DetailView()
+            // 子Viewに渡す
+                .environmentObject(requestParameter)
         }
     }
 
@@ -79,10 +87,6 @@ struct MainView: View {
             VStack(spacing: 50) {
                 toSelectPrefectureViewButton
                 toDetailViewButton
-            }
-            // データ取得後に遷移させると想定し、読み込み中画面を表示
-            if mainViewModel.locationClient.isRequesting {
-                ProgressView()
             }
         }
         .navigationTitle(Text("Home"))

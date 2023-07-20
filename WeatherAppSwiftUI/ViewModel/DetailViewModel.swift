@@ -6,10 +6,18 @@
 //
 
 import SwiftUI
+import CoreLocation
 // ViewModel
 class DetailViewModel: ObservableObject {
     // データモデルはオプショナル型で宣言し、最後に値を格納することで、仮データに惑わされないメリット
     @Published var savedWeatherData: SavedWeatherData?
+    
+    var requestParameter = RequestParameter()
+    
+    // デリゲートパターン⑤処理を任される側で、デリゲートを適用させる
+    init() {
+        LocationClient.shared.delegate = self
+    }
     
     // 仮に格納するための変数を宣言する
     private var dates: [[Date]] = []
@@ -23,10 +31,9 @@ class DetailViewModel: ObservableObject {
     var city: String = String()
     private var lat: Double = Double()
     private var lon: Double = Double()
-
-    @ObservedObject var locationClient = LocationClient.shared
     
     @Published var isLoading = true
+    @Published var selectLocation: String?
 
     ///セクションの数を返すメソッド。メソッドでまたはコンピューテッドプロパティでしか、savedWeatherDataを参照できないため
     var sectionCount: Int {
@@ -68,10 +75,23 @@ class DetailViewModel: ObservableObject {
         }
         return dataEntrys
     }
-    
-    func getWeatherData() async {
-        isLoading = true
-        API.share.sendAPIRequest() { result in
+    /// 位置情報から天気を取得するメソッド
+    func getLocationWeatherData(latitude: Double, longitude: Double) {
+        API.share.sendAPIGotLocationRequest(latitude: latitude, longitude: longitude) { result in
+            switch result {
+            case .success(let weather):
+                print("データ取得成功")
+//                print(weather)
+                self.saveAPIResponse(response: weather)
+            case .failure(let error):
+                print("データ取得失敗")
+//                print(error)
+            }
+        }
+    }
+    /// 選択した都道府県から天気を取得するメソッド
+    func getSelectedWeatherData(selectLocation: String) {
+        API.share.sendAPISelectedLocationRequest(selectLocation: selectLocation) { result in
             switch result {
             case .success(let weather):
                 print("データ取得成功")
@@ -104,7 +124,6 @@ class DetailViewModel: ObservableObject {
             // 同じ日付を含んでいればインデックス番号取得しその配列に要素を追加、そうでなければ新たな配列として追加
             if let index = dateStringArray.firstIndex(where: {$0 == dateString}) {
                 // 含んでいるとき
-                print("含む")
                 dates[index].append(date)
                 maxTemps[index].append(maxTemp)
                 minTemps[index].append(minTemp)
@@ -112,7 +131,6 @@ class DetailViewModel: ObservableObject {
                 iconURL[index].append(url!)
             } else {
                 // 含んでいないとき
-                print("含まず")
                 dateStringArray.append(dateString)
                 dates.append([date])
                 maxTemps.append([maxTemp])
@@ -127,5 +145,18 @@ class DetailViewModel: ObservableObject {
                 self.isLoading = false
             }
         }
+    }
+}
+
+// デリゲートパターン④処理を任される側で、Extensionしてデリゲートプロトコルに準拠、デリゲートメソッド内に実行したい処理を記述
+extension DetailViewModel: LocationManagerDelegate {
+    func didUpdateLocation(_ location: CLLocationCoordinate2D) {
+        print("デリゲートで位置情報が渡された")
+
+        getLocationWeatherData(latitude: location.latitude, longitude: location.longitude)
+    }
+    
+    func didFailWithError(_ error: Error) {
+        print("デリゲートで位置情報取得失敗が渡された")
     }
 }

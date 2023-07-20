@@ -12,6 +12,8 @@ struct DetailView: View {
     @StateObject var detailViewModel = DetailViewModel()
     /// 画面を閉じるアクションのインスタンス作成
     @Environment(\.dismiss) private var dismiss
+    // 子ViewとしてModelのインスタンスを受け取る
+    @EnvironmentObject var requestParameter: RequestParameter
 
     // グラフの高さ指定
     private var chartHeight = UIScreen.main.bounds.height / 5
@@ -59,21 +61,36 @@ struct DetailView: View {
             AxisMarks(values: .stride(by: .hour, count: 3), content: { value in
                 // グリッドラインの表示
                 AxisGridLine()
+                    .foregroundStyle(.gray)
                 AxisTick()
                 // ラベルの形式を指定
                 AxisValueLabel(content: {
                     let time = detailViewModel.savedWeatherData!.times[value.index]
                     Text(time.formatJapaneseTimeStyle)
+                        .foregroundColor(.black)
                 })
             })
         }
         // Y軸の設定（オートでは、取得データのうち、降水確率が最高３０だと、３０が上限のグラフになってしまう）
         .chartYAxis {
-            AxisMarks(values: [0, 25, 50, 75, 100])
+            let values = [0, 25, 50, 75, 100]
+            AxisMarks(values: values) { value in
+                // グリッドラインの表示
+                AxisGridLine()
+                    .foregroundStyle(.gray)
+                AxisTick()
+                
+                AxisValueLabel(content: {
+                    let pop = values[value.index]
+                    Text(String(pop))
+                        .foregroundColor(.black)
+                })
+            }
         }
         // Y軸に単位ラベル表示
         .chartYAxisLabel(position: .topTrailing, content: {
             Text("%")
+                .foregroundColor(.black)
         })
         .frame(height: chartHeight)
         .padding()
@@ -124,6 +141,7 @@ struct DetailView: View {
                     .scaledToFit()
             } placeholder: {
                 ProgressView()
+                    .tint(.black)
                     .frame(width: iconSize, height: iconSize)
                     .scaledToFit()
             }
@@ -178,9 +196,18 @@ struct DetailView: View {
     // 読込み画面
     var loadingView: some View {
         ProgressView()
+            .tint(.black)
+            .scaleEffect(2)
             .task {
                 print("読込み画面表示")
-                await detailViewModel.getWeatherData()
+                if requestParameter.isFromSelectView! {
+                    if let selectLocation = requestParameter.selectLocation {
+                        print("選択した都道府県から天気取得")
+                        detailViewModel.getSelectedWeatherData(selectLocation: selectLocation)
+                    }
+                } else {
+                    print("位置情報から天気取得（ここでは何もしない。デリゲート待ち）")
+                }
             }
     }
     

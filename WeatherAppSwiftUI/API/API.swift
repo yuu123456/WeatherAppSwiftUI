@@ -9,9 +9,8 @@ import Alamofire
 import Foundation
 
 class API {
-//    @ObservedObject var savedWeatherData = SavedWeatherData()
     static let share = API()
-    var selectLocation = String()
+    
     // 通信読み込み中
     var isLoading = true
     
@@ -44,23 +43,35 @@ class API {
     var urlString: String {
         buildURLString()
     }
-    
-    func sendAPIRequest(completion: @escaping (Result<WeatherData, Error>) -> Void) {
+    /// 選択した都道府県をパラメータに追加してAPIリクエストする
+    func sendAPISelectedLocationRequest(selectLocation: String, completion: @escaping (Result<WeatherData, Error>) -> Void) {
         var baseParameters = buildBaseParameters()
         // 固有のパラメータを追加する。辞書型のため、appendではない
         baseParameters.updateValue(selectLocation, forKey: "q")
-        
-        AF.request(urlString, method: method, parameters: baseParameters).response { response in
+        sendAPIRequest(parameters: baseParameters, completion: completion)
+    }
+    /// 位置情報をパラメータに追加してAPIリクエストする
+    func sendAPIGotLocationRequest(latitude: Double, longitude: Double, completion: @escaping (Result<WeatherData, Error>) -> Void) {
+        var baseParameters = buildBaseParameters()
+        // 固有のパラメータを追加する。辞書型のため、appendではない
+        baseParameters.updateValue(latitude, forKey: "lat")
+        baseParameters.updateValue(longitude, forKey: "lon")
+        sendAPIRequest(parameters: baseParameters, completion: completion)
+    }
+    /// APIリクエストの共通部分
+    func sendAPIRequest(parameters: Parameters, completion: @escaping (Result<WeatherData, Error>) -> Void) {
+
+        AF.request(urlString, method: method, parameters: parameters).response { response in
             guard let data = response.data else {
                 print("dataが不適切？")
                 return
             }
             let decoder = JSONDecoder()
             do {
-                print("成功")
                 let response = try decoder.decode(WeatherData.self, from: data)
 //                print(response)
                 completion(Result.success(response))
+                print("成功")
             } catch {
                 print("失敗")
                 print(error.localizedDescription)
