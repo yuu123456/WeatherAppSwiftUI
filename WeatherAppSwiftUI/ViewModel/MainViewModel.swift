@@ -22,6 +22,8 @@ class MainViewModel: ObservableObject {
     @Published var isPresentedDoneReserveNotificationAlert = false
     @Published var notificationTime = Date()
     @Published var isSettingTime = false
+    @Published var isNotificationPermission = false
+    @Published var isNotNotificationAlert = false
     
     func notificationTimeString() -> String {
         return notificationTime.formatJapaneseTimeStyle
@@ -55,15 +57,34 @@ class MainViewModel: ObservableObject {
             isDisplayNotGetLocDialog = true
         }
     }
+    /// 通知の許諾状態を確認する
+    func checkNotificationPermission() {
+        UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                if settings.authorizationStatus == .authorized {
+                    self.isNotificationPermission = true
+                } else {
+                    self.isNotificationPermission = false
+                }
+            }
+        }
+    }
+    
     /// 通知ボタンが押された時の処理
     func tappedNotificationButton() {
-        print("通知ボタンが押された")
-        if isNotification {
-            print("通知予約あり")
-            isPresentedReleaseNotificationAlert = true
+        checkNotificationPermission()
+        if isNotificationPermission {
+            print("通知ボタンが押された")
+            if isNotification {
+                print("通知予約あり")
+                isPresentedReleaseNotificationAlert = true
+            } else {
+                print("通知予約なし")
+                isPresentedReserveNotificationAlert = true
+            }
         } else {
-            print("通知予約なし")
-            isPresentedReserveNotificationAlert = true
+            isNotNotificationAlert = true
         }
     }
     /// 通知予約アラートのOKボタンが押された時

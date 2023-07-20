@@ -78,6 +78,7 @@ struct MainView: View {
             Image(systemName: mainViewModel.notificationImageName())
                 .tint(.yellow)
         }
+        .notPermissionNotificationAlertModifier(isPresented: $mainViewModel.isNotNotificationAlert)
         .releaseNotificationAlertModifier(isPresented: $mainViewModel.isPresentedReleaseNotificationAlert, okClosure: {
             mainViewModel.tappedReleaseOkButton()
         })

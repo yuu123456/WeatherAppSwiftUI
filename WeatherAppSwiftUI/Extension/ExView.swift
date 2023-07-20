@@ -87,6 +87,22 @@ extension View {
             } message: {
                 Text("毎日の通知予約を解除しました。")
             }
-
+    }
+    
+    /// 通知許諾不可時のアラートをカスタムモディファイアメソッドにしたもの
+    func notPermissionNotificationAlertModifier(isPresented: Binding<Bool>) -> some View {
+        self
+            // テキストを省略させないモディファイア
+            .alert("通知が許可されていません", isPresented: isPresented) {
+                Button("閉じる") {
+                    print("閉じる押した")
+                }
+                Button("設定") {
+                    print("設定画面へ遷移")
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                }
+            } message: {
+                Text("端末設定を見直してください")
+            }
     }
 }
