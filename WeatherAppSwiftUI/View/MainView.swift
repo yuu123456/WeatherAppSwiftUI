@@ -9,6 +9,8 @@ import SwiftUI
 struct MainView: View {
     @StateObject private var mainViewModel = MainViewModel()
     private var buttonWidth = UIScreen.main.bounds.width / 1.5
+    private var settingTimeViewWidth = UIScreen.main.bounds.width * 0.8
+    private var settingTimeViewHeight = UIScreen.main.bounds.height * 0.25
 
     /// ナビゲーションバーの設定を行うメソッド
     func setupNavigationBar() {
@@ -79,11 +81,11 @@ struct MainView: View {
         .releaseNotificationAlertModifier(isPresented: $mainViewModel.isPresentedReleaseNotificationAlert, okClosure: {
             mainViewModel.tappedReleaseOkButton()
         })
-        .reserveNotificationAlertModifier(isPresented: $mainViewModel.isPresentedReserveNotificationAlert, okClosure: {
-            mainViewModel.tappedReserveOkButton()
+        .reserveNotificationAlertModifier(isPresented: $mainViewModel.isPresentedReserveNotificationAlert, notificationTime: $mainViewModel.notificationTime, okClosure: {
+            mainViewModel.isSettingTime = true
         })
         .doneReleaseNotificationAlertModifier(isPresented: $mainViewModel.isPresentedDoneReleaseNotificationAlert)
-        .doneReserveNotificationAlertModifier(isPresented: $mainViewModel.isPresentedDoneReserveNotificationAlert)
+        .doneReserveNotificationAlertModifier(isPresented: $mainViewModel.isPresentedDoneReserveNotificationAlert, notificationTimeString: mainViewModel.notificationTimeString())
     }
 
     //背景色
@@ -92,6 +94,38 @@ struct MainView: View {
         LinearGradient(gradient: Gradient(colors: [.cyan, .white]), startPoint: .top, endPoint: .bottom)
             .ignoresSafeArea()
     }
+    /// 通知時間の設定画面（アラートに実装不可能なため）
+    var settingTimeView: some View {
+        ZStack {
+            Color(uiColor: .darkGray)
+            VStack {
+                Text("通知を設定したい時間を選択")
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                DatePicker("時間を選択", selection: $mainViewModel.notificationTime, displayedComponents: .hourAndMinute)
+                    .tint(.white)
+                    .labelsHidden()
+                HStack {
+                    Button("キャンセル") {
+                        mainViewModel.tappedReserveCancelButton()
+                    }
+                    .padding()
+                    .frame(width: settingTimeViewWidth / 2.2)
+                    .background(Color(uiColor: .lightGray))
+                    .cornerRadius(30)
+                    Button("設定") {
+                        mainViewModel.tappedReserveOkButton()
+                    }
+                    .padding()
+                    .frame(width: settingTimeViewWidth / 2.2)
+                    .background(Color(uiColor: .lightGray))
+                    .cornerRadius(30)
+                }
+            }
+        }
+        .frame(width: settingTimeViewWidth, height: settingTimeViewHeight)
+        .cornerRadius(30)
+    }
 
     var body: some View {
         ZStack {
@@ -99,6 +133,9 @@ struct MainView: View {
             VStack(spacing: 50) {
                 toSelectPrefectureViewButton
                 toDetailViewButton
+            }
+            if mainViewModel.isSettingTime {
+                settingTimeView
             }
         }
 

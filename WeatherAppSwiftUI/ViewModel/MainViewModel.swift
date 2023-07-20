@@ -20,6 +20,12 @@ class MainViewModel: ObservableObject {
     @Published var isPresentedReserveNotificationAlert = false
     @Published var isPresentedDoneReleaseNotificationAlert = false
     @Published var isPresentedDoneReserveNotificationAlert = false
+    @Published var notificationTime = Date()
+    @Published var isSettingTime = false
+    
+    func notificationTimeString() -> String {
+        return notificationTime.formatJapaneseTimeStyle
+    }
     
     /// 通知アイコン名を返すメソッド
     func notificationImageName() -> String {
@@ -63,7 +69,12 @@ class MainViewModel: ObservableObject {
     /// 通知予約アラートのOKボタンが押された時
     func tappedReserveOkButton() {
         reserveNotification()
+        isSettingTime = false
         isPresentedDoneReserveNotificationAlert = true
+    }
+    /// 通知予約アラートのキャンセルボタンが押された時
+    func tappedReserveCancelButton() {
+        isSettingTime = false
     }
     /// 通知解除アラートのOKボタンが押された時
     func tappedReleaseOkButton() {
@@ -81,8 +92,8 @@ class MainViewModel: ObservableObject {
         
         // 通知したい時間を作成
         var dateComponents = DateComponents()
-        dateComponents.hour = Date().hour
-        dateComponents.minute = Date().minute + 2
+        dateComponents.hour = notificationTime.hour
+        dateComponents.minute = notificationTime.minute
         // 通知トリガーの設定（毎日同時刻に）
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         // 通知リクエストの作成

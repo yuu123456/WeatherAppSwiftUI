@@ -38,26 +38,26 @@ extension View {
     }
     
     // 通知予約するダイアログ
-    func reserveNotificationAlertModifier(isPresented: Binding<Bool>, okClosure: @escaping () -> Void) -> some View {
+    func reserveNotificationAlertModifier(isPresented: Binding<Bool>, notificationTime: Binding<Date>, okClosure: @escaping () -> Void) -> some View {
         self
             .alert("通知予約しますか？", isPresented: isPresented) {
+                DatePicker("時刻を選択", selection: notificationTime,displayedComponents: .hourAndMinute)
                 Button("キャンセル") {
-//                    cancelAction
+
                 }
                 Button("予約する") {
                     okClosure()
                 }
             } message: {
-                Text("通知予約したい時間を選択してください")
+                Text("通知予約したい時間を設定してください")
             }
-
     }
     // 通知解除するか尋ねるダイアログ
     func releaseNotificationAlertModifier(isPresented: Binding<Bool>, okClosure: @escaping () -> Void) -> some View {
         self
             .alert("通知予約を解除しますか?", isPresented: isPresented) {
                 Button("キャンセル") {
-//                    cancelAction
+
                 }
                 Button("解除する") {
                     okClosure()
@@ -65,19 +65,17 @@ extension View {
             } message: {
                 Text("既に通知が予約されています。通知予約を解除してもよろしいでしょうか？")
             }
-
     }
     // 通知予約完了ダイアログ
-    func doneReserveNotificationAlertModifier(isPresented: Binding<Bool>) -> some View {
+    func doneReserveNotificationAlertModifier(isPresented: Binding<Bool>, notificationTimeString: String) -> some View {
         self
             .alert("通知予約完了", isPresented: isPresented) {
                 Button("OK") {
                     
                 }
             } message: {
-                Text("毎日指定した時間に通知が行われます")
+                Text("毎日\(notificationTimeString)に通知が行われます")
             }
-
     }
     // 通知予約解除完了ダイアログ
     func doneReleaseNotificationAlertModifier(isPresented: Binding<Bool>) -> some View {
