@@ -23,6 +23,16 @@ struct MainView: View {
     }
     init() {
         setupNavigationBar()
+        
+        let center = UNUserNotificationCenter.current()
+        // 通知の設定
+        center.requestAuthorization(options: [.alert, .sound]) { granted, error in
+            if granted {
+                print("通知許可された")
+            } else {
+                print("通知拒否された")
+            }
+        }
     }
 
     // 選択画面に遷移するボタン
@@ -61,12 +71,19 @@ struct MainView: View {
     //ナビゲーションバーに表示する通知ボタン
     var notificationButton: some View {
         Button {
-            //ダイアログ出す処理を記述
-            
+            mainViewModel.tappedNotificationButton()
         } label: {
             Image(systemName: mainViewModel.notificationImageName())
                 .tint(.yellow)
         }
+        .releaseNotificationAlertModifier(isPresented: $mainViewModel.isPresentedReleaseNotificationAlert, okClosure: {
+            mainViewModel.tappedReleaseOkButton()
+        })
+        .reserveNotificationAlertModifier(isPresented: $mainViewModel.isPresentedReserveNotificationAlert, okClosure: {
+            mainViewModel.tappedReserveOkButton()
+        })
+        .doneReleaseNotificationAlertModifier(isPresented: $mainViewModel.isPresentedDoneReleaseNotificationAlert)
+        .doneReserveNotificationAlertModifier(isPresented: $mainViewModel.isPresentedDoneReserveNotificationAlert)
     }
 
     //背景色

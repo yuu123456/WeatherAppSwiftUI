@@ -16,6 +16,11 @@ class MainViewModel: ObservableObject {
     /// 通知予約の有無を示す変数
     @Published var isNotification = false
     
+    @Published var isPresentedReleaseNotificationAlert = false
+    @Published var isPresentedReserveNotificationAlert = false
+    @Published var isPresentedDoneReleaseNotificationAlert = false
+    @Published var isPresentedDoneReserveNotificationAlert = false
+    
     /// 通知アイコン名を返すメソッド
     func notificationImageName() -> String {
         switch isNotification {
@@ -44,4 +49,54 @@ class MainViewModel: ObservableObject {
             isDisplayNotGetLocDialog = true
         }
     }
+    /// 通知ボタンが押された時の処理
+    func tappedNotificationButton() {
+        print("通知ボタンが押された")
+        if isNotification {
+            print("通知予約あり")
+            isPresentedReleaseNotificationAlert = true
+        } else {
+            print("通知予約なし")
+            isPresentedReserveNotificationAlert = true
+        }
+    }
+    /// 通知予約アラートのOKボタンが押された時
+    func tappedReserveOkButton() {
+        reserveNotification()
+        isPresentedDoneReserveNotificationAlert = true
+    }
+    /// 通知解除アラートのOKボタンが押された時
+    func tappedReleaseOkButton() {
+        releaseNotification()
+        isPresentedDoneReleaseNotificationAlert = true
+    }
+    
+    /// 通知を予約する（標準ではバックグラウンド通知のみ、フォアグラウンドは別途設定する必要あり）
+    func reserveNotification() {
+        // 通知内容の設定
+        let content = UNMutableNotificationContent()
+        content.title = "今後の天気は・・・？"
+        content.body = "通知をタップして、天気予報を確認しよう！"
+        content.sound = .default
+        
+        // 通知したい時間を作成
+        var dateComponents = DateComponents()
+        dateComponents.hour = Date().hour
+        dateComponents.minute = Date().minute + 2
+        // 通知トリガーの設定（毎日同時刻に）
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        // 通知リクエストの作成
+        let request = UNNotificationRequest(identifier: "DailyNotification", content: content, trigger: trigger)
+        // リクエストを追加
+        UNUserNotificationCenter.current().add(request)
+        isNotification = true
+        print("通知予約完了")
+    }
+    /// 予約した通知を解除する
+    func releaseNotification() {
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        isNotification = false
+        print("通知予約解除した")
+    }
+    
 }
