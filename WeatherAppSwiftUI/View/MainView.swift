@@ -89,6 +89,7 @@ struct MainView: View {
                 toDetailViewButton
             }
         }
+
         .navigationTitle(Text("Home"))
         .navigationBarTitleDisplayMode(.inline)
         // 戻るボタンを非表示
@@ -98,6 +99,8 @@ struct MainView: View {
                 notificationButton
             }
         }
+        // 位置情報取得不可時のアラート
+        .notGetLocationAlertModifier(isPresented: $mainViewModel.isDisplayNotGetLocDialog)
     }
 }
 
