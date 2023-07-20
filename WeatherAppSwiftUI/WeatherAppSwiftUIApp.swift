@@ -15,7 +15,7 @@ struct WeatherAppSwiftUIApp: App {
         WindowGroup {
             SplashView()
             // アプリ全体で使用するオブジェクトを子Viewに渡すとき
-//                .environmentObject(savedWeatherData)
+//                .environmentObject(RequestParameter())
         }
     }
 }
