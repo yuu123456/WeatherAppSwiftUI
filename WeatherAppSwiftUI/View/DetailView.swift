@@ -222,6 +222,10 @@ struct DetailView: View {
                 detailMainView
             }
         }
+        // APIエラー時に表示するダイアログ
+        .errorAlertModifier(title: detailViewModel.errorTitle ?? "仮アラートタイトル",
+                            message: detailViewModel.errorMessage ?? "仮アラートメッセージ",
+                            isPresented: $detailViewModel.isDisplayErrorDialog)
     }
 }
 

@@ -43,15 +43,16 @@ class API {
     var urlString: String {
         buildURLString()
     }
+    // AFError型にたくさん種類があるが、独自に定義したエラーを使用
     /// 選択した都道府県をパラメータに追加してAPIリクエストする
-    func sendAPISelectedLocationRequest(selectLocation: String, completion: @escaping (Result<WeatherData, Error>) -> Void) {
+    func sendAPISelectedLocationRequest(selectLocation: String, completion: @escaping (Result<WeatherData, AFError>) -> Void) {
         var baseParameters = buildBaseParameters()
         // 固有のパラメータを追加する。辞書型のため、appendではない
         baseParameters.updateValue(selectLocation, forKey: "q")
         sendAPIRequest(parameters: baseParameters, completion: completion)
     }
     /// 位置情報をパラメータに追加してAPIリクエストする
-    func sendAPIGotLocationRequest(latitude: Double, longitude: Double, completion: @escaping (Result<WeatherData, Error>) -> Void) {
+    func sendAPIGotLocationRequest(latitude: Double, longitude: Double, completion: @escaping (Result<WeatherData, AFError>) -> Void) {
         var baseParameters = buildBaseParameters()
         // 固有のパラメータを追加する。辞書型のため、appendではない
         baseParameters.updateValue(latitude, forKey: "lat")
@@ -59,23 +60,29 @@ class API {
         sendAPIRequest(parameters: baseParameters, completion: completion)
     }
     /// APIリクエストの共通部分
-    func sendAPIRequest(parameters: Parameters, completion: @escaping (Result<WeatherData, Error>) -> Void) {
-
+    func sendAPIRequest(parameters: Parameters, completion: @escaping (Result<WeatherData, AFError>) -> Void) {
         AF.request(urlString, method: method, parameters: parameters).response { response in
-            guard let data = response.data else {
-                print("dataが不適切？")
-                return
-            }
-            let decoder = JSONDecoder()
-            do {
-                let response = try decoder.decode(WeatherData.self, from: data)
-//                print(response)
-                completion(Result.success(response))
-                print("成功")
-            } catch {
-                print("失敗")
-                print(error.localizedDescription)
-                completion(Result.failure(response as! Error))
+            switch response.result {
+                // レスポンスの取得成功
+            case .success(let data):
+                print("APIレスポンス取得成功")
+                // デコードにTry
+                do {
+                    let decoder = JSONDecoder()
+                    let weatherData = try decoder.decode(WeatherData.self, from: data!)
+                    print("デコード成功")
+                    completion(.success(weatherData))
+                } catch {
+                    // デコードエラー
+                    print("デコード失敗")
+                    print(error)
+                    completion(.failure(.parameterEncoderFailed(reason: .encoderFailed(error: error))))
+                }
+                // レスポンス取得失敗
+            case .failure(let error):
+                // ネットワーク接続エラー
+                print("レスポンス取得失敗")
+                completion(.failure(error))
             }
         }
         print("リクエストした")

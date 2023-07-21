@@ -11,6 +11,10 @@ import CoreLocation
 class DetailViewModel: ObservableObject {
     // データモデルはオプショナル型で宣言し、最後に値を格納することで、仮データに惑わされないメリット
     @Published var savedWeatherData: SavedWeatherData?
+    @Published var isDisplayErrorDialog = false
+
+    @Published var errorTitle: String?
+    @Published var errorMessage: String?
     
     var requestParameter = RequestParameter()
     
@@ -85,7 +89,10 @@ class DetailViewModel: ObservableObject {
                 self.saveAPIResponse(response: weather)
             case .failure(let error):
                 print("データ取得失敗")
-//                print(error)
+                print(error)
+                self.errorTitle = "エラー発生"
+                self.errorMessage = error.localizedDescription
+                self.isDisplayErrorDialog = true
             }
         }
     }
@@ -99,7 +106,10 @@ class DetailViewModel: ObservableObject {
                 self.saveAPIResponse(response: weather)
             case .failure(let error):
                 print("データ取得失敗")
-//                print(error)
+                print(error)
+                self.errorTitle = "エラー発生"
+                self.errorMessage = error.localizedDescription
+                self.isDisplayErrorDialog = true
             }
         }
     }
