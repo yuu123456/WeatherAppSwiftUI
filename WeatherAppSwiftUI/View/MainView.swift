@@ -12,6 +12,8 @@ struct MainView: View {
     private var settingTimeViewWidth = UIScreen.main.bounds.width * 0.8
     private var settingTimeViewHeight = UIScreen.main.bounds.height * 0.25
     private let settingTimeViewColor = Color(uiColor: .darkGray)
+    // 親Viewとする
+    @ObservedObject var requestParameter = RequestParameter()
 
     /// ナビゲーションバーの設定を行うメソッド
     func setupNavigationBar() {
@@ -57,6 +59,7 @@ struct MainView: View {
         NavigationStack {
             Button {
                 Task {
+                    requestParameter.isFromSelectView = false
                     mainViewModel.tappedGetLocationButton()
                 }
                 
@@ -68,6 +71,8 @@ struct MainView: View {
         //モーダル遷移
         .sheet(isPresented: $mainViewModel.isDisplayDetailView) {
             DetailView()
+            // 子Viewに渡す
+                .environmentObject(requestParameter)
         }
     }
 

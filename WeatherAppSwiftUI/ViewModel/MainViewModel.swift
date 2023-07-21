@@ -52,7 +52,6 @@ class MainViewModel: ObservableObject {
     }
     /// 現在地取得ボタンがタップされた時の処理
     func tappedGetLocationButton() {
-        API.share.selectLocation = String()
         print("Button Pushed")
         if LocationClient.shared.isAuthorized {
             print("アプリの位置情報取得が許可されています")
