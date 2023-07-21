@@ -73,6 +73,7 @@ class MainViewModel: ObservableObject {
                 if settings.authorizationStatus == .authorized {
                     print("通知許可済")
                     self.isNotificationPermissionStatus = true
+                    self.checkReservedNotification()
                 } else {
                     print("通知未許可")
                     self.isNotificationPermissionStatus = false
@@ -81,7 +82,7 @@ class MainViewModel: ObservableObject {
             }
         }
     }
-    /// 通知の有無を確認する
+    /// 通知予約の有無を確認する
     func checkReservedNotification() {
         /// 通知予約有無の判定
         UNUserNotificationCenter.current().getPendingNotificationRequests { [weak self] array in
@@ -104,7 +105,6 @@ class MainViewModel: ObservableObject {
     func tappedNotificationButton() {
         print("通知ボタンが押された")
         checkNotificationPermission()
-        checkReservedNotification()
     }
     /// 通知予約アラートのOKボタンが押された時
     func tappedReserveOkButton() {
