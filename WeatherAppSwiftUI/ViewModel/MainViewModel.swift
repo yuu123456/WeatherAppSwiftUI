@@ -14,7 +14,8 @@ class MainViewModel: ObservableObject {
     @Published var isDisplayDetailView = false
     @Published var isDisplayNotGetLocDialog = false
     /// 通知予約の有無を示す変数
-    @Published var isNotification = false
+    /// @AppStorage("キー")を付与するだけで、普通の変数として扱える。（UserDefaultsに値を保存する→再起動時のアイコンに反映のため）
+    @AppStorage("isNotification") var isNotification = false
     // 通知解除アラート表示フラグ
     @Published var isPresentedReleaseNotificationAlert = false
     // 通知予約アラート表示フラグ
