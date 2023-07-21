@@ -90,8 +90,8 @@ class DetailViewModel: ObservableObject {
             case .failure(let error):
                 print("データ取得失敗")
                 print(error)
-                self.errorTitle = error.title
-                self.errorMessage = error.message
+                self.errorTitle = "エラー発生"
+                self.errorMessage = error.localizedDescription
                 self.isDisplayErrorDialog = true
             }
         }
@@ -107,8 +107,8 @@ class DetailViewModel: ObservableObject {
             case .failure(let error):
                 print("データ取得失敗")
                 print(error)
-                self.errorTitle = error.title
-                self.errorMessage = error.message
+                self.errorTitle = "エラー発生"
+                self.errorMessage = error.localizedDescription
                 self.isDisplayErrorDialog = true
             }
         }
