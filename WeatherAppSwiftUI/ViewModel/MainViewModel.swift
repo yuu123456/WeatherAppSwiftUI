@@ -70,19 +70,30 @@ class MainViewModel: ObservableObject {
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 if settings.authorizationStatus == .authorized {
-                    self.isNotificationPermissionStatus = true
-                    if self.isNotification {
-                        print("通知予約あり")
-                        self.isPresentedReleaseNotificationAlert = true
-                    } else {
-                        print("通知予約なし")
-                        self.isPresentedReserveNotificationAlert = true
-                        }
                     print("通知許可済")
+                    self.isNotificationPermissionStatus = true
                 } else {
-                    self.isNotificationPermissionStatus = false
                     print("通知未許可")
+                    self.isNotificationPermissionStatus = false
                     self.isNotNotificationAlert = true
+                }
+            }
+        }
+    }
+    /// 通知の有無を確認する
+    func checkReservedNotification() {
+        /// 通知予約有無の判定
+        UNUserNotificationCenter.current().getPendingNotificationRequests { [weak self] array in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                if array.isEmpty {
+                    print("通知予約なし")
+                    self.isNotification = false
+                    self.isPresentedReserveNotificationAlert = true
+                } else {
+                    print("通知予約あり")
+                    self.isNotification = true
+                    self.isPresentedReleaseNotificationAlert = true
                 }
             }
         }
@@ -92,6 +103,7 @@ class MainViewModel: ObservableObject {
     func tappedNotificationButton() {
         print("通知ボタンが押された")
         checkNotificationPermission()
+        checkReservedNotification()
     }
     /// 通知予約アラートのOKボタンが押された時
     func tappedReserveOkButton() {
