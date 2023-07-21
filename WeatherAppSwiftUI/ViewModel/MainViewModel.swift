@@ -15,14 +15,21 @@ class MainViewModel: ObservableObject {
     @Published var isDisplayNotGetLocDialog = false
     /// 通知予約の有無を示す変数
     @Published var isNotification = false
-    
+    // 通知解除アラート表示フラグ
     @Published var isPresentedReleaseNotificationAlert = false
+    // 通知予約アラート表示フラグ
     @Published var isPresentedReserveNotificationAlert = false
+    // 通知解除完了アラート表示フラグ
     @Published var isPresentedDoneReleaseNotificationAlert = false
+    // 通知予約完了アラート表示フラグ
     @Published var isPresentedDoneReserveNotificationAlert = false
+    // 通知の時間
     @Published var notificationTime = Date()
+    // 時間設定画面の表示フラグ
     @Published var isSettingTime = false
-    @Published var isNotificationPermission = false
+    // 通知の許諾状態を示す(trueで通知許可）
+    @Published var isNotificationPermissionStatus = false
+    // 通知未許可時のアラート表示フラグ
     @Published var isNotNotificationAlert = false
     
     func notificationTimeString() -> String {
@@ -63,9 +70,19 @@ class MainViewModel: ObservableObject {
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 if settings.authorizationStatus == .authorized {
-                    self.isNotificationPermission = true
+                    self.isNotificationPermissionStatus = true
+                    if self.isNotification {
+                        print("通知予約あり")
+                        self.isPresentedReleaseNotificationAlert = true
+                    } else {
+                        print("通知予約なし")
+                        self.isPresentedReserveNotificationAlert = true
+                        }
+                    print("通知許可済")
                 } else {
-                    self.isNotificationPermission = false
+                    self.isNotificationPermissionStatus = false
+                    print("通知未許可")
+                    self.isNotNotificationAlert = true
                 }
             }
         }
@@ -73,19 +90,8 @@ class MainViewModel: ObservableObject {
     
     /// 通知ボタンが押された時の処理
     func tappedNotificationButton() {
+        print("通知ボタンが押された")
         checkNotificationPermission()
-        if isNotificationPermission {
-            print("通知ボタンが押された")
-            if isNotification {
-                print("通知予約あり")
-                isPresentedReleaseNotificationAlert = true
-            } else {
-                print("通知予約なし")
-                isPresentedReserveNotificationAlert = true
-            }
-        } else {
-            isNotNotificationAlert = true
-        }
     }
     /// 通知予約アラートのOKボタンが押された時
     func tappedReserveOkButton() {
