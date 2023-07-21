@@ -10,9 +10,6 @@ import Foundation
 
 class API {
     static let share = API()
-    var selectLocation = String()
-    var latitude = Double()
-    var longitude = Double()
     
     // 通信読み込み中
     var isLoading = true
@@ -47,19 +44,25 @@ class API {
         buildURLString()
     }
     // AFError型にたくさん種類があるが、独自に定義したエラーを使用
-    func sendAPIRequest(completion: @escaping (Result<WeatherData, APIError>) -> Void) {
+    /// 選択した都道府県をパラメータに追加してAPIリクエストする
+    func sendAPISelectedLocationRequest(selectLocation: String, completion: @escaping (Result<WeatherData, APIError>) -> Void) {
         var baseParameters = buildBaseParameters()
-        // 都道府県を選択済かどうかで判定
-        if selectLocation == String() {
-            // 固有のパラメータを追加する。辞書型のため、appendではない
-            baseParameters.updateValue(latitude, forKey: "lat")
-            baseParameters.updateValue(longitude, forKey: "lon")
-        } else {
-            // 固有のパラメータを追加する。辞書型のため、appendではない
-            baseParameters.updateValue(selectLocation, forKey: "q")
-        }
-        // デコードのエラーハンドリングのため、.responseDecodableは用いない
-        AF.request(urlString, method: method, parameters: baseParameters).response { response in
+        // 固有のパラメータを追加する。辞書型のため、appendではない
+        baseParameters.updateValue(selectLocation, forKey: "q")
+        sendAPIRequest(parameters: baseParameters, completion: completion)
+    }
+    /// 位置情報をパラメータに追加してAPIリクエストする
+    func sendAPIGotLocationRequest(latitude: Double, longitude: Double, completion: @escaping (Result<WeatherData, APIError>) -> Void) {
+        var baseParameters = buildBaseParameters()
+        // 固有のパラメータを追加する。辞書型のため、appendではない
+        baseParameters.updateValue(latitude, forKey: "lat")
+        baseParameters.updateValue(longitude, forKey: "lon")
+        sendAPIRequest(parameters: baseParameters, completion: completion)
+    }
+    /// APIリクエストの共通部分
+    func sendAPIRequest(parameters: Parameters, completion: @escaping (Result<WeatherData, APIError>) -> Void) {
+
+        AF.request(urlString, method: method, parameters: parameters).response { response in
             switch response.result {
                 // レスポンスの取得成功
             case .success(let data):
@@ -75,7 +78,7 @@ class API {
                     print("デコード失敗")
                     completion(.failure(.responseParseError(error)))
                 }
-            // レスポンス取得失敗
+                // レスポンス取得失敗
             case .failure(let error):
                 // ネットワーク接続エラー
                 print("レスポンス取得失敗")

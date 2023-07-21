@@ -16,6 +16,8 @@ class DetailViewModel: ObservableObject {
     @Published var errorTitle: String?
     @Published var errorMessage: String?
     
+    var requestParameter = RequestParameter()
+    
     // デリゲートパターン⑤処理を任される側で、デリゲートを適用させる
     init() {
         LocationClient.shared.delegate = self
@@ -35,6 +37,7 @@ class DetailViewModel: ObservableObject {
     private var lon: Double = Double()
     
     @Published var isLoading = true
+    @Published var selectLocation: String?
 
     ///セクションの数を返すメソッド。メソッドでまたはコンピューテッドプロパティでしか、savedWeatherDataを参照できないため
     var sectionCount: Int {
@@ -76,9 +79,26 @@ class DetailViewModel: ObservableObject {
         }
         return dataEntrys
     }
-
-    func getWeatherData() {
-        API.share.sendAPIRequest() { result in
+    /// 位置情報から天気を取得するメソッド
+    func getLocationWeatherData(latitude: Double, longitude: Double) {
+        API.share.sendAPIGotLocationRequest(latitude: latitude, longitude: longitude) { result in
+            switch result {
+            case .success(let weather):
+                print("データ取得成功")
+//                print(weather)
+                self.saveAPIResponse(response: weather)
+            case .failure(let error):
+                print("データ取得失敗")
+                print(error)
+                self.errorTitle = error.title
+                self.errorMessage = error.message
+                self.isDisplayErrorDialog = true
+            }
+        }
+    }
+    /// 選択した都道府県から天気を取得するメソッド
+    func getSelectedWeatherData(selectLocation: String) {
+        API.share.sendAPISelectedLocationRequest(selectLocation: selectLocation) { result in
             switch result {
             case .success(let weather):
                 print("データ取得成功")
@@ -142,10 +162,8 @@ class DetailViewModel: ObservableObject {
 extension DetailViewModel: LocationManagerDelegate {
     func didUpdateLocation(_ location: CLLocationCoordinate2D) {
         print("デリゲートで位置情報が渡された")
-        // APIに取得した値を送る
-        API.share.latitude = location.latitude
-        API.share.longitude = location.longitude
-        getWeatherData()
+
+        getLocationWeatherData(latitude: location.latitude, longitude: location.longitude)
     }
     
     func didFailWithError(_ error: Error) {
