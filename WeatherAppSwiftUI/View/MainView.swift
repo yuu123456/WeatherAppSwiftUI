@@ -99,32 +99,38 @@ struct MainView: View {
     var settingTimeView: some View {
         ZStack {
             Color(uiColor: .darkGray)
-            VStack {
+            VStack(spacing: 0) {
                 Text("通知を設定したい時間を選択")
                     .fontWeight(.bold)
                     .foregroundColor(.white)
+                    .padding()
+                Spacer()
                 DatePicker("時間を選択", selection: $mainViewModel.notificationTime, displayedComponents: .hourAndMinute)
                     .tint(.white)
                     .labelsHidden()
-                HStack {
+                // Buttonを下部に揃える
+                Spacer()
+                // 上線
+                Rectangle().frame(width: settingTimeViewWidth, height: 1)
+                HStack(spacing: 0) {
                     Button("キャンセル") {
                         mainViewModel.tappedReserveCancelButton()
                     }
-                    .padding()
-                    .frame(width: settingTimeViewWidth / 2.2)
+                    .padding(.vertical)
+                    .frame(width: settingTimeViewWidth / 2, height: settingTimeViewHeight / 4)
                     .background(Color(uiColor: .lightGray))
-                    .cornerRadius(30)
+                    Rectangle().frame(width: 1, height: settingTimeViewHeight / 4)
                     Button("設定") {
                         mainViewModel.tappedReserveOkButton()
                     }
-                    .padding()
-                    .frame(width: settingTimeViewWidth / 2.2)
+                    .padding(.vertical)
+                    .frame(width: settingTimeViewWidth / 2, height: settingTimeViewHeight / 4)
                     .background(Color(uiColor: .lightGray))
-                    .cornerRadius(30)
                 }
             }
         }
         .frame(width: settingTimeViewWidth, height: settingTimeViewHeight)
+        // 背景だけ角丸にすることで、実際のアラートっぽくできる！！！！！
         .cornerRadius(30)
     }
 
