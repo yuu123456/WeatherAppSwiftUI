@@ -11,6 +11,7 @@ struct MainView: View {
     private var buttonWidth = UIScreen.main.bounds.width / 1.5
     private var settingTimeViewWidth = UIScreen.main.bounds.width * 0.8
     private var settingTimeViewHeight = UIScreen.main.bounds.height * 0.25
+    private let settingTimeViewColor = Color(uiColor: .darkGray)
 
     /// ナビゲーションバーの設定を行うメソッド
     func setupNavigationBar() {
@@ -95,10 +96,15 @@ struct MainView: View {
         LinearGradient(gradient: Gradient(colors: [.cyan, .white]), startPoint: .top, endPoint: .bottom)
             .ignoresSafeArea()
     }
+    /// buttonに使用する一部の枠線用
+    var partOfBorder: some View {
+        Rectangle()
+            .foregroundColor(Color(uiColor: .lightGray))
+    }
     /// 通知時間の設定画面（アラートに実装不可能なため）
     var settingTimeView: some View {
         ZStack {
-            Color(uiColor: .darkGray)
+            settingTimeViewColor
             VStack(spacing: 0) {
                 Text("通知を設定したい時間を選択")
                     .fontWeight(.bold)
@@ -106,26 +112,29 @@ struct MainView: View {
                     .padding()
                 Spacer()
                 DatePicker("時間を選択", selection: $mainViewModel.notificationTime, displayedComponents: .hourAndMinute)
+                    .scaleEffect(1.5)
                     .tint(.white)
                     .labelsHidden()
                 // Buttonを下部に揃える
                 Spacer()
                 // 上線
-                Rectangle().frame(width: settingTimeViewWidth, height: 1)
+                partOfBorder
+                    .frame(width: settingTimeViewWidth, height: 0.5)
                 HStack(spacing: 0) {
                     Button("キャンセル") {
                         mainViewModel.tappedReserveCancelButton()
                     }
                     .padding(.vertical)
                     .frame(width: settingTimeViewWidth / 2, height: settingTimeViewHeight / 4)
-                    .background(Color(uiColor: .lightGray))
-                    Rectangle().frame(width: 1, height: settingTimeViewHeight / 4)
+                    .background(settingTimeViewColor)
+                    partOfBorder
+                        .frame(width: 0.5, height: settingTimeViewHeight / 4)
                     Button("設定") {
                         mainViewModel.tappedReserveOkButton()
                     }
                     .padding(.vertical)
                     .frame(width: settingTimeViewWidth / 2, height: settingTimeViewHeight / 4)
-                    .background(Color(uiColor: .lightGray))
+                    .background(settingTimeViewColor)
                 }
             }
         }
