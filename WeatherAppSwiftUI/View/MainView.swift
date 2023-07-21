@@ -147,6 +147,8 @@ struct MainView: View {
         .toolbar() {
             ToolbarItem(placement: .navigationBarTrailing) {
                 notificationButton
+                // 時間設定中も押せてしまうので、阻止するために
+                    .disabled(mainViewModel.isSettingTime)
             }
         }
         // 位置情報取得不可時のアラート
