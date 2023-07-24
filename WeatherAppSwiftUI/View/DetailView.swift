@@ -92,6 +92,8 @@ struct DetailView: View {
             Text("%")
                 .foregroundColor(.black)
         })
+        // パラメータガイドの上限値を明示する。これを指定しないと、降水確率０％の時、0%が上に来る不具合あり
+        .chartYScale(domain: 0...100)
         .frame(height: chartHeight)
         .padding()
     }
