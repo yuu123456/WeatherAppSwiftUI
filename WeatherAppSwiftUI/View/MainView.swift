@@ -161,7 +161,7 @@ struct MainView: View {
         }
         .onAppear() {
             // アプリ起動時に位置情報許諾（App使用中の許可）ダイアログの表示
-            LocationClient.shared.requestAuthorization()t
+            LocationClient.shared.requestAuthorization()
         }
         .navigationTitle(Text("Home"))
         .navigationBarTitleDisplayMode(.inline)
