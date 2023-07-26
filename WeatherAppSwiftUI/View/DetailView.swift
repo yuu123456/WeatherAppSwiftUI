@@ -58,7 +58,8 @@ struct DetailView: View {
         // X軸の設定
         .chartXAxis {
             // 3時間ごとにラベルをつける（表示間隔の調整)
-            AxisMarks(values: .stride(by: .hour, count: 3), content: { value in
+            // presetに.alignedを指定することで、グリッド線の下部に来て、最後のラベルも表示可能となる
+            AxisMarks(preset: .aligned, values: .stride(by: .hour, count: 3), content: { value in
                 // グリッドラインの表示
                 AxisGridLine()
                     .foregroundStyle(.gray)
