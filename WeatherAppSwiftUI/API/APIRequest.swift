@@ -37,7 +37,7 @@ extension APIRequest {
     
     func request<Request: APIRequest>(_ request: Request, completion: @escaping ((Result<Request.Response, AFError>) -> ())) {
         print("リクエストを作成")
-        let request = AF.request(request.buildURL(), method: method, parameters: parameters).response { response in
+        AF.request(request.buildURL(), method: method, parameters: parameters).response { response in
             guard let data = response.data else {
                 print("dataがnil -> ネットワーク未接続")
                 completion(.failure(.sessionTaskFailed(error: URLError(.notConnectedToInternet))))
