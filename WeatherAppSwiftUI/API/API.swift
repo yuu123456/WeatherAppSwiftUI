@@ -32,7 +32,7 @@ final class API {
         ]
         return parameters
     }
-    
+    /// 選択した都道府県から天気を取得するAPI Request
     struct GetSelectedLocationWeatherRequest: APIRequest {
         typealias Response = WeatherData
         
@@ -45,7 +45,7 @@ final class API {
         }
         
     }
-    
+    /// 位置情報から天気を取得するAPI Request
     struct GetGotLocationWeatherRequest: APIRequest {
         typealias Response = WeatherData
         
@@ -60,7 +60,7 @@ final class API {
         }
         
     }
-    
+    /// APIRequestを送るメソッド
     func send<Request: APIRequest>(request: Request,
                                    completion: @escaping ((Result<Request.Response, AFError>) -> Void)) {
         print("リクエスト実行")
