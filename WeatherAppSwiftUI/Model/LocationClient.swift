@@ -25,9 +25,12 @@ final class LocationClient: NSObject, ObservableObject {
     private override init() {
         super.init()
         locationManager.delegate = self
-        // アプリ起動時に位置情報許諾（App使用中の許可）ダイアログの表示
+    }
+    /// 位置情報許諾を表示するメソッド
+    func requestAuthorization() {
         locationManager.requestWhenInUseAuthorization()
     }
+    
     /// 位置情報取得許諾状態を表すプロパティ。許可されていればTrue
     var isAuthorized: Bool {
         let status = locationManager.authorizationStatus
