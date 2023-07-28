@@ -79,13 +79,13 @@ class DetailViewModel: ObservableObject {
         }
         return dataEntrys
     }
-    /// 位置情報から天気を取得するメソッド
-    func getLocationWeatherData(latitude: Double, longitude: Double) {
-        API.share.sendAPIGotLocationRequest(latitude: latitude, longitude: longitude) { result in
+    /// 選択した都道府県から天気を取得するメソッド
+    func getWeather(selectLocation: String) {
+        let request = API.GetSelectedLocationWeatherRequest(selectLocation: selectLocation)
+        API.share.send(request: request) { result in
             switch result {
             case .success(let weather):
                 print("データ取得成功")
-//                print(weather)
                 self.saveAPIResponse(response: weather)
             case .failure(let error):
                 print("データ取得失敗")
@@ -96,13 +96,13 @@ class DetailViewModel: ObservableObject {
             }
         }
     }
-    /// 選択した都道府県から天気を取得するメソッド
-    func getSelectedWeatherData(selectLocation: String) {
-        API.share.sendAPISelectedLocationRequest(selectLocation: selectLocation) { result in
+    /// 位置情報から天気を取得するメソッド
+    func getWeather(latitude: Double, longitude: Double) {
+        let request = API.GetGotLocationWeatherRequest(latitude: latitude, longitude: longitude)
+        API.share.send(request: request) { result in
             switch result {
             case .success(let weather):
                 print("データ取得成功")
-//                print(weather)
                 self.saveAPIResponse(response: weather)
             case .failure(let error):
                 print("データ取得失敗")
@@ -163,7 +163,7 @@ extension DetailViewModel: LocationManagerDelegate {
     func didUpdateLocation(_ location: CLLocationCoordinate2D) {
         print("デリゲートで位置情報が渡された")
 
-        getLocationWeatherData(latitude: location.latitude, longitude: location.longitude)
+        getWeather(latitude: location.latitude, longitude: location.longitude)
     }
     
     func didFailWithError(_ error: Error) {

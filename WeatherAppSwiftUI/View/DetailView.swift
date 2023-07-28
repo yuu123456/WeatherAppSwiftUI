@@ -205,7 +205,7 @@ struct DetailView: View {
                 if requestParameter.isFromSelectView! {
                     if let selectLocation = requestParameter.selectLocation {
                         print("選択した都道府県から天気取得")
-                        detailViewModel.getSelectedWeatherData(selectLocation: selectLocation)
+                        detailViewModel.getWeather(selectLocation: selectLocation)
                     }
                 } else {
                     print("位置情報から天気取得（ここでは何もしない。デリゲート待ち）")

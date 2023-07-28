@@ -8,15 +8,11 @@
 import Alamofire
 import Foundation
 
-class API {
+final class API {
     static let share = API()
     
     // 通信読み込み中
     var isLoading = true
-    
-    private let baseURLString = "https://api.openweathermap.org"
-    private let path: String = "/data/2.5/forecast"
-    private let method: HTTPMethod = .get
     
     private let apiKey: String = "5dfc577c1d7d94e9e23a00431582f1ac"
     // 摂氏度にするオプション
@@ -25,11 +21,7 @@ class API {
     private let lang: String = "ja"
     // 取得するデータ数を制限するオプション（３時間＊８個　＝　２４時間分）
     private let cnt: String = "8"
-    // URLを構築する
-    func buildURLString() -> String {
-        let url = baseURLString + path
-        return url
-    }
+    
     // ベースとなるパラメータを構築する
     func buildBaseParameters() -> Parameters {
         let parameters: Parameters = [
@@ -40,51 +32,48 @@ class API {
         ]
         return parameters
     }
-    var urlString: String {
-        buildURLString()
+    
+    struct GetSelectedLocationWeatherRequest: APIRequest {
+        typealias Response = WeatherData
+        
+        let selectLocation: String
+        
+        var parameters: Alamofire.Parameters {
+            var parameters = API.share.buildBaseParameters()
+            parameters.updateValue(selectLocation, forKey: "q")
+            return parameters
+        }
+        
     }
-    // AFError型にたくさん種類があるが、独自に定義したエラーを使用
-    /// 選択した都道府県をパラメータに追加してAPIリクエストする
-    func sendAPISelectedLocationRequest(selectLocation: String, completion: @escaping (Result<WeatherData, AFError>) -> Void) {
-        var baseParameters = buildBaseParameters()
-        // 固有のパラメータを追加する。辞書型のため、appendではない
-        baseParameters.updateValue(selectLocation, forKey: "q")
-        sendAPIRequest(parameters: baseParameters, completion: completion)
+    
+    struct GetGotLocationWeatherRequest: APIRequest {
+        typealias Response = WeatherData
+        
+        let latitude: Double
+        let longitude: Double
+        
+        var parameters: Alamofire.Parameters {
+            var parameters = API.share.buildBaseParameters()
+            parameters.updateValue(latitude, forKey: "lat")
+            parameters.updateValue(longitude, forKey: "lon")
+            return parameters
+        }
+        
     }
-    /// 位置情報をパラメータに追加してAPIリクエストする
-    func sendAPIGotLocationRequest(latitude: Double, longitude: Double, completion: @escaping (Result<WeatherData, AFError>) -> Void) {
-        var baseParameters = buildBaseParameters()
-        // 固有のパラメータを追加する。辞書型のため、appendではない
-        baseParameters.updateValue(latitude, forKey: "lat")
-        baseParameters.updateValue(longitude, forKey: "lon")
-        sendAPIRequest(parameters: baseParameters, completion: completion)
-    }
-    /// APIリクエストの共通部分
-    func sendAPIRequest(parameters: Parameters, completion: @escaping (Result<WeatherData, AFError>) -> Void) {
-        AF.request(urlString, method: method, parameters: parameters).response { response in
-            switch response.result {
-                // レスポンスの取得成功
+    
+    func send<Request: APIRequest>(request: Request,
+                                   completion: @escaping ((Result<Request.Response, AFError>) -> Void)) {
+        print("リクエスト実行")
+        request.request(request) { response in
+            switch response {
             case .success(let data):
-                print("APIレスポンス取得成功")
-                // デコードにTry
-                do {
-                    let decoder = JSONDecoder()
-                    let weatherData = try decoder.decode(WeatherData.self, from: data!)
-                    print("デコード成功")
-                    completion(.success(weatherData))
-                } catch {
-                    // デコードエラー
-                    print("デコード失敗")
-                    print(error)
-                    completion(.failure(.parameterEncoderFailed(reason: .encoderFailed(error: error))))
-                }
-                // レスポンス取得失敗
+                print("リクエスト成功")
+                completion(.success(data))
             case .failure(let error):
-                // ネットワーク接続エラー
-                print("レスポンス取得失敗")
+                print("リクエスト失敗")
                 completion(.failure(error))
             }
         }
-        print("リクエストした")
     }
 }
+

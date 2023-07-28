@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct WeatherData: Codable {
-    var list: [dataList]
+    var list: [DataList]
     var city: City
 }
 
-struct dataList: Codable {
+struct DataList: Codable {
     var main: Main
     var weather: [Weather]
     /// 降水確率
