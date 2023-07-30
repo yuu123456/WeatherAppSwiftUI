@@ -20,7 +20,6 @@ protocol APIRequest {
     var parameters: Parameters { get }
     
     func request<Request: APIRequest>(_ request: Request, completion: @escaping ((Result<Request.Response, AFError>) -> ()))
-    func decode(from data: Data) throws -> Response
 }
 // 共通で普遍的な部分をエクステンションで一元管理し、同じ定義の繰り返しをなくす
 extension APIRequest {
@@ -34,10 +33,10 @@ extension APIRequest {
         let url = baseURL.appendingPathComponent(path)
         return url
     }
-    
-    func request<Request: APIRequest>(_ request: Request, completion: @escaping ((Result<Request.Response, AFError>) -> ())) {
+    // ジェネリック型で定義することで汎用性を持たせる。ただし、U　にはデコードするためにDecodableに準拠させる必要あり。
+    func request<T, U: Decodable>(_ request: T, completion: @escaping ((Result<U, AFError>) -> ())) {
         print("リクエストを作成")
-        AF.request(request.buildURL(), method: method, parameters: parameters).response { response in
+        AF.request(buildURL(), method: method, parameters: parameters).response { response in
             guard let data = response.data else {
                 print("dataがnil -> ネットワーク未接続")
                 completion(.failure(.sessionTaskFailed(error: URLError(.notConnectedToInternet))))
@@ -50,13 +49,13 @@ extension APIRequest {
                 if (200..<300).contains(statusCode) {
                     print("ステータスコードが２００番台")
                     print("レスポンスをデコードします")
-                    let weatherData = try request.decode(from: data)
-                    completion(.success(weatherData))
+                    // レスポンスのジェネリック型Uに沿ってデコードする
+                    let decoder = JSONDecoder()
+                    let responseData = try decoder.decode(U.self, from: data)
+                    completion(.success(responseData))
                     print("デコード成功")
-                } else if (400..<500).contains(statusCode) {
+                } else if (400..<600).contains(statusCode) {
                     print("クライアントエラー（400リクエストが不正、401認証が不足、403リクエスト未許可、404リソースが見つからない")
-                    completion(.failure(AFError.responseValidationFailed(reason: .unacceptableStatusCode(code: statusCode))))
-                } else if (500..<600).contains(statusCode) {
                     print("サーバーエラー（500サーバー内部エラー、502無効なレスポンス受け取り、503サーバー過負荷orメンテナンス")
                     completion(.failure(AFError.responseValidationFailed(reason: .unacceptableStatusCode(code: statusCode))))
                 } else {
@@ -68,9 +67,5 @@ extension APIRequest {
                 completion(.failure(AFError.responseSerializationFailed(reason: .decodingFailed(error: error))))
             }
         }
-    }
-    func decode(from data: Data) throws -> WeatherData {
-        let response = try JSONDecoder().decode(WeatherData.self, from: data)
-        return WeatherData(list: response.list, city: response.city)
     }
 }
