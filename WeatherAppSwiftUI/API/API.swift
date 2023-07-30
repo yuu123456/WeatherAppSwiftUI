@@ -64,16 +64,7 @@ final class API {
     func send<Request: APIRequest>(request: Request,
                                    completion: @escaping ((Result<Request.Response, AFError>) -> Void)) {
         print("リクエスト実行")
-        request.request(request) { response in
-            switch response {
-            case .success(let data):
-                print("リクエスト成功")
-                completion(.success(data))
-            case .failure(let error):
-                print("リクエスト失敗")
-                completion(.failure(error))
-            }
-        }
+        return request.request(request, completion: completion)
     }
 }
 
