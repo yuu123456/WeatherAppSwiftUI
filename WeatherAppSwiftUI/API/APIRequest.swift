@@ -19,7 +19,7 @@ protocol APIRequest {
     var method: HTTPMethod { get }
     var parameters: Parameters { get }
     
-    func request<Request: APIRequest>(_ request: Request, completion: @escaping ((Result<Request.Response, AFError>) -> ()))
+    func request<Request: APIRequest>(_ request: Request, completion: @escaping ((Result<Response, AFError>) -> ()))
 }
 // 共通で普遍的な部分をエクステンションで一元管理し、同じ定義の繰り返しをなくす
 extension APIRequest {
@@ -33,8 +33,8 @@ extension APIRequest {
         let url = baseURL.appendingPathComponent(path)
         return url
     }
-    // ジェネリック型で定義することで汎用性を持たせる。ただし、U　にはデコードするためにDecodableに準拠させる必要あり。
-    func request<T, U: Decodable>(_ request: T, completion: @escaping ((Result<U, AFError>) -> ())) {
+    // ジェネリック型で定義することで汎用性を持たせる。
+    func request<T>(_ request: T, completion: @escaping ((Result<Response, AFError>) -> ())) {
         print("リクエストを作成")
         AF.request(buildURL(), method: method, parameters: parameters).response { response in
             guard let data = response.data else {
@@ -51,7 +51,7 @@ extension APIRequest {
                     print("レスポンスをデコードします")
                     // レスポンスのジェネリック型Uに沿ってデコードする
                     let decoder = JSONDecoder()
-                    let responseData = try decoder.decode(U.self, from: data)
+                    let responseData = try decoder.decode(Response.self, from: data)
                     completion(.success(responseData))
                     print("デコード成功")
                 } else if (400..<600).contains(statusCode) {
