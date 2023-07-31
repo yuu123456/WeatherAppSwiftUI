@@ -19,7 +19,7 @@ protocol APIRequest {
     var method: HTTPMethod { get }
     var parameters: Parameters { get }
     
-    func request<Request: APIRequest>(_ request: Request, completion: @escaping ((Result<Response, AFError>) -> ()))
+    func request<T>(_ request: T, completion: @escaping ((Result<Response, AFError>) -> ()))
 }
 // 共通で普遍的な部分をエクステンションで一元管理し、同じ定義の繰り返しをなくす
 extension APIRequest {
