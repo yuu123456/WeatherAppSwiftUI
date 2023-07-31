@@ -50,8 +50,7 @@ extension APIRequest {
                     print("ステータスコードが２００番台")
                     print("レスポンスをデコードします")
                     // レスポンスのジェネリック型Uに沿ってデコードする
-                    let decoder = JSONDecoder()
-                    let responseData = try decoder.decode(Response.self, from: data)
+                    let responseData = try JSONDecoder().decode(Response.self, from: data)
                     completion(.success(responseData))
                     print("デコード成功")
                 } else if (400..<600).contains(statusCode) {
