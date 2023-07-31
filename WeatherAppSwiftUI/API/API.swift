@@ -34,6 +34,7 @@ final class API {
     }
     /// 選択した都道府県から天気を取得するAPI Request
     struct GetSelectedLocationWeatherRequest: APIRequest {
+        /// 準拠する側で、Responseの型を明示的に指定する
         typealias Response = WeatherData
         
         let selectLocation: String
@@ -47,6 +48,7 @@ final class API {
     }
     /// 位置情報から天気を取得するAPI Request
     struct GetGotLocationWeatherRequest: APIRequest {
+        /// 準拠する側で、Responseの型を明示的に指定する
         typealias Response = WeatherData
         
         let latitude: Double
